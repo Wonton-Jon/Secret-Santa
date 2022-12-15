@@ -31,16 +31,19 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-  ERROR_CODES errorCode = ERROR_CODES.VALID;
+  ERROR_CODE errorCode = ERROR_CODE.VALID;
   final _participantCountController = TextEditingController();
   String? numParticipants = "";
 
-  Future errorCheck(numParticipants) async {
+
+  //Return the error code of the error checked values
+  Future<ERROR_CODE> errorCheck(numParticipants) async {
     setState(() {
       numParticipants = _participantCountController.text.trim();
       errorCode = checkInt(numParticipants);
     });
+
+    return errorCode;
   }
 
   @override
@@ -67,16 +70,19 @@ class _MyHomePageState extends State<MyHomePage> {
                   int participants = 0;
 
                   //If the error code is valid, then parse it
-                  if (errorCode == ERROR_CODES.VALID)
+                  if (errorCode == ERROR_CODE.VALID)
                     participants = int.parse(numParticipants);
 
                   print('participants = $participants');
                   print('errormessage = ${getErrorMessage(errorCode)}');
-
-              
                 },
                 onEditingComplete: () {
-                  errorCheck(numParticipants);
+                  //If the error checking is successful, then display user data containers
+                  //equal to the number of users entered
+                  if(errorCheck(numParticipants) == ERROR_CODE.VALID) {
+                    
+                  }//end if
+
                 },
               ),
             ),
@@ -90,6 +96,9 @@ class _MyHomePageState extends State<MyHomePage> {
                       fontWeight: FontWeight.w500,
                       color: Colors.red),
                 )),
+            ListView(
+
+            )
           ],
         ),
       ),
@@ -100,60 +109,4 @@ class _MyHomePageState extends State<MyHomePage> {
       // ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
-}
-
-Container newUserField() {
-  return Container(
-    child: Column(children: [
-      TextField(
-        onChanged: (value) {
-          print('vlaue is $value');
-        },
-        decoration: InputDecoration(
-          hintText: 'Enter person\'s name.',
-          contentPadding:
-              EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(32.0)),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.lightBlueAccent, width: 1.0),
-            borderRadius: BorderRadius.all(Radius.circular(32.0)),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.lightBlueAccent, width: 2.0),
-            borderRadius: BorderRadius.all(Radius.circular(32.0)),
-          ),
-        ),
-      ),
-      TextField(
-        onChanged: (value) {
-          print('vlaue is $value');
-        },
-        decoration: InputDecoration(
-          hintText: 'Enter person\'s email address.',
-          contentPadding:
-              EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(32.0)),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.lightBlueAccent, width: 1.0),
-            borderRadius: BorderRadius.all(Radius.circular(32.0)),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.lightBlueAccent, width: 2.0),
-            borderRadius: BorderRadius.all(Radius.circular(32.0)),
-          ),
-        ),
-      ),
-    ]),
-  );
-}
-
-printErrorMessage(errorCode) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 0.0),
-    child: getErrorMessage(errorCode),
-  );
 }
