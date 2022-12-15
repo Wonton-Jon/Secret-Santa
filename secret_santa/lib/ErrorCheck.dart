@@ -1,0 +1,68 @@
+import 'dart:math';
+import 'package:flutter/material.dart';
+
+enum ERROR_CODES { VALID, EMPTY_TEXT, INVALID_INT, OUT_OF_BOUNDS }
+
+final MIN_PARTICIPANTS = 3;
+final MAX_PARTICIPANTS = pow(10, 5).toInt();
+
+//Attempt to parse string as int
+//Throw exception and print error message if the string is not int formatted
+ERROR_CODES checkInt(String value) {
+  ERROR_CODES errorCode = ERROR_CODES.VALID; //Set error code to valid status
+  try {
+    int val = int.parse(value);
+  } on FormatException catch (error) {
+    errorCode = ERROR_CODES.INVALID_INT;
+    return errorCode;
+  } //end catch
+
+  //Set the number of participants
+  int numParticipants = int.parse(value);
+
+  //Check the bounds of the value
+  if (!checkBounds(numParticipants, MIN_PARTICIPANTS, MAX_PARTICIPANTS))
+    errorCode = ERROR_CODES.OUT_OF_BOUNDS;
+
+  //If the string is empty, set error code
+  if (value.length == 0) errorCode = ERROR_CODES.EMPTY_TEXT;
+
+  print("errorCode = ${errorCode.toString()}");
+
+  //Return the correct widget
+  return errorCode;
+}
+
+//Return true if the value is between the min and max inclusive
+bool checkBounds(int value, int MIN, int MAX) {
+  return MIN <= value && value <= MAX;
+}
+
+//Returns error message based on error code passed in
+getErrorMessage(ERROR_CODES error) {
+  String errorMessage = ""; //Error message to be printed
+
+  print('inside getErrorMessage() errorcode = ${error.toString()}');
+
+  switch (error) {
+    case ERROR_CODES.EMPTY_TEXT:
+      errorMessage = "Please enter a number.";
+      break;
+    case ERROR_CODES.INVALID_INT:
+      errorMessage = "Number of participants must be an integer.";
+      break;
+    case ERROR_CODES.OUT_OF_BOUNDS:
+      errorMessage = "Number of participants must be between $MIN_PARTICIPANTS and $MAX_PARTICIPANTS.";
+      break;
+    case ERROR_CODES.VALID:
+      errorMessage = "";
+      break;
+  } //end switch
+
+  return errorMessage;
+  // return Text(
+  //   errorMessage,
+  //   style:
+  //       TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: Colors.red),
+  // );
+}
