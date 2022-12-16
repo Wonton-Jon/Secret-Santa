@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:secret_santa/ErrorCheck.dart';
+import 'UserData.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      home: const MyHomePage(title: 'Secwet Santwa ^u^'),
+      home: const MyHomePage(title: 'Secwet Santwa ^u^ :D'),
     );
   }
 }
@@ -31,66 +32,98 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-  ERROR_CODES errorCode = ERROR_CODES.VALID;
+  ERROR_CODE errorCode = ERROR_CODE.VALID;
   final _participantCountController = TextEditingController();
   String? numParticipants = "";
+  int participants = 0;
+  List<UserData> particpantContainers = [];
 
-  Future errorCheck(numParticipants) async {
+  //Return the error code of the error checked values
+  Future<ERROR_CODE> errorCheck(numParticipants) async {
     setState(() {
       numParticipants = _participantCountController.text.trim();
       errorCode = checkInt(numParticipants);
     });
+
+    if (errorCode == ERROR_CODE.VALID) {
+      participants = int.parse(numParticipants);
+      for (int i = 0; i < participants; i++) {
+        UserData newUser = UserData(name: "", email: "");
+        particpantContainers.add(newUser);
+      }//end for
+    } //end if
+
+    return errorCode;
   }
 
   @override
   Widget build(BuildContext context) {
-    String numParticipants = ""; //Number of participants to be parsed
-
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(widget.title, style: TextStyle(fontSize: 30),),
+        centerTitle: true,
+        backgroundColor: Colors.green[900],
+        foregroundColor: Colors.white,
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-              child: TextFormField(
-                controller: _participantCountController,
-                decoration: const InputDecoration(
-                  border: UnderlineInputBorder(),
-                  labelText: 'Enter Number of Participants',
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                child: TextFormField(
+                  controller: _participantCountController,
+                  decoration: const InputDecoration(
+                    border: UnderlineInputBorder(),
+                    labelText: 'Enter Number of Participants',
+                  ),
+                  onFieldSubmitted: (numParticipants) {
+                    //If the error code is valid, then parse it
+                    if (errorCode == ERROR_CODE.VALID)
+                      participants = int.parse(numParticipants);
+      
+                    print('participants = $participants');
+                    print('errormessage = ${getErrorMessage(errorCode)}');
+                  },
+                  onEditingComplete: () {
+                    //If the error checking is successful, then display user data containers
+                    //equal to the number of users entered
+                    errorCheck(numParticipants);
+                  },
                 ),
-                onFieldSubmitted: (numParticipants) {
-                  int participants = 0;
-
-                  //If the error code is valid, then parse it
-                  if (errorCode == ERROR_CODES.VALID)
-                    participants = int.parse(numParticipants);
-
-                  print('participants = $participants');
-                  print('errormessage = ${getErrorMessage(errorCode)}');
-
-              
-                },
-                onEditingComplete: () {
-                  errorCheck(numParticipants);
-                },
               ),
-            ),
-            Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 25.0, vertical: 0.0),
-                child: Text(
-                  getErrorMessage(errorCode),
-                  style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.red),
-                )),
-          ],
+              Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 25.0, vertical: 0.0),
+                  child: Text(
+                    getErrorMessage(errorCode),
+                    style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.red),
+                  )),
+              participants == 0
+                  ? Container()
+                  : ListView.separated(
+                    physics: NeverScrollableScrollPhysics(),
+                      itemCount: particpantContainers.length,
+                      itemBuilder: (context, index) {
+                        return particpantContainers[index].getContainer();
+                      },
+                      shrinkWrap: true,
+                      separatorBuilder: (BuildContext context, int index) =>
+                          Divider(
+                        height: 8,
+                        thickness: 1,
+                        color: Colors.transparent,
+                        endIndent: 10,
+                        indent: 10,
+                      ),
+                    ), //Put floating action button to add user underneath the last item in the list view
+            ],
+          ),
         ),
       ),
       // floatingActionButton: FloatingActionButton(
@@ -100,60 +133,4 @@ class _MyHomePageState extends State<MyHomePage> {
       // ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
-}
-
-Container newUserField() {
-  return Container(
-    child: Column(children: [
-      TextField(
-        onChanged: (value) {
-          print('vlaue is $value');
-        },
-        decoration: InputDecoration(
-          hintText: 'Enter person\'s name.',
-          contentPadding:
-              EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(32.0)),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.lightBlueAccent, width: 1.0),
-            borderRadius: BorderRadius.all(Radius.circular(32.0)),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.lightBlueAccent, width: 2.0),
-            borderRadius: BorderRadius.all(Radius.circular(32.0)),
-          ),
-        ),
-      ),
-      TextField(
-        onChanged: (value) {
-          print('vlaue is $value');
-        },
-        decoration: InputDecoration(
-          hintText: 'Enter person\'s email address.',
-          contentPadding:
-              EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(32.0)),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.lightBlueAccent, width: 1.0),
-            borderRadius: BorderRadius.all(Radius.circular(32.0)),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.lightBlueAccent, width: 2.0),
-            borderRadius: BorderRadius.all(Radius.circular(32.0)),
-          ),
-        ),
-      ),
-    ]),
-  );
-}
-
-printErrorMessage(errorCode) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 0.0),
-    child: getErrorMessage(errorCode),
-  );
 }

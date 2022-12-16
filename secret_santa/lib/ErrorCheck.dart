@@ -1,19 +1,19 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 
-enum ERROR_CODES { VALID, EMPTY_TEXT, INVALID_INT, OUT_OF_BOUNDS }
+enum ERROR_CODE { VALID, EMPTY_TEXT, INVALID_INT, OUT_OF_BOUNDS }
 
 final MIN_PARTICIPANTS = 3;
 final MAX_PARTICIPANTS = pow(10, 5).toInt();
 
 //Attempt to parse string as int
 //Throw exception and print error message if the string is not int formatted
-ERROR_CODES checkInt(String value) {
-  ERROR_CODES errorCode = ERROR_CODES.VALID; //Set error code to valid status
+ERROR_CODE checkInt(String value) {
+  ERROR_CODE errorCode = ERROR_CODE.VALID; //Set error code to valid status
   try {
     int val = int.parse(value);
   } on FormatException catch (error) {
-    errorCode = ERROR_CODES.INVALID_INT;
+    errorCode = ERROR_CODE.INVALID_INT;
     return errorCode;
   } //end catch
 
@@ -22,10 +22,10 @@ ERROR_CODES checkInt(String value) {
 
   //Check the bounds of the value
   if (!checkBounds(numParticipants, MIN_PARTICIPANTS, MAX_PARTICIPANTS))
-    errorCode = ERROR_CODES.OUT_OF_BOUNDS;
+    errorCode = ERROR_CODE.OUT_OF_BOUNDS;
 
   //If the string is empty, set error code
-  if (value.length == 0) errorCode = ERROR_CODES.EMPTY_TEXT;
+  if (value.length == 0) errorCode = ERROR_CODE.EMPTY_TEXT;
 
   print("errorCode = ${errorCode.toString()}");
 
@@ -39,22 +39,22 @@ bool checkBounds(int value, int MIN, int MAX) {
 }
 
 //Returns error message based on error code passed in
-getErrorMessage(ERROR_CODES error) {
+getErrorMessage(ERROR_CODE error) {
   String errorMessage = ""; //Error message to be printed
 
   print('inside getErrorMessage() errorcode = ${error.toString()}');
 
   switch (error) {
-    case ERROR_CODES.EMPTY_TEXT:
+    case ERROR_CODE.EMPTY_TEXT:
       errorMessage = "Please enter a number.";
       break;
-    case ERROR_CODES.INVALID_INT:
+    case ERROR_CODE.INVALID_INT:
       errorMessage = "Number of participants must be an integer.";
       break;
-    case ERROR_CODES.OUT_OF_BOUNDS:
+    case ERROR_CODE.OUT_OF_BOUNDS:
       errorMessage = "Number of participants must be between $MIN_PARTICIPANTS and $MAX_PARTICIPANTS.";
       break;
-    case ERROR_CODES.VALID:
+    case ERROR_CODE.VALID:
       errorMessage = "";
       break;
   } //end switch
