@@ -57,14 +57,18 @@ class _MyHomePageState extends State<MyHomePage> {
       participantContainers = [];
 
       //Load the list of older values into the list of new values
-      for (int i = 0; i < participants; i++) {
-        participantContainers.add(tempList[i]);
-      }//end for
 
-      int unadded = tempList.length - participantContainers.length; //Number of users that need to be added to list
+      for (int i = 0; i < tempList.length && i < participants; i++) {
+        participantContainers.add(tempList[i]);
+      } //end for
+
+      int unadded = participants -
+          tempList.length; //Number of users that need to be added to list
 
       //Add new users to list if the list size is less than the number specified
-      for (int i = 0; i < unadded; i++) {
+      for (int i = 0;
+          i < unadded && participantContainers.length < participants;
+          i++) {
         UserData newUser = UserData(name: "", email: "");
         participantContainers.add(newUser);
       } //end for
@@ -148,7 +152,35 @@ class _MyHomePageState extends State<MyHomePage> {
                         return participantContainers[index].getContainer();
                       },
                       shrinkWrap: true,
-                    )
+                    ),
+              Row(
+                children: [
+                  FloatingActionButton(
+                    child: new Icon(Icons.add),
+                    focusColor: Colors.green[900],
+                    heroTag: 'IncrementButton',
+                    onPressed: () {
+                      //If the error code is valid, then increment the number of participants
+                      if (int.tryParse(numParticipants.toString()) != null) {
+                        participants++;
+                        _participantCountController.text = participants.toString();
+                      } //end if
+                    },
+                  ),
+                  FloatingActionButton(
+                    child: new Icon(Icons.add),
+                    focusColor: Colors.green[900],
+                    heroTag: 'DecrementButton',
+                    onPressed: () {
+                      //If the error code is valid, then increment the number of participants
+                      if (int.tryParse(numParticipants.toString()) != null) {
+                        participants--;
+                        _participantCountController.text = participants.toString();
+                      } //end if
+                    },
+                  )
+                ],
+              )
               // separatorBuilder: (BuildContext context, int index) =>
               //     Divider(
               //   height: 8,
