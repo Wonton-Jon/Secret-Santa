@@ -175,54 +175,11 @@ class _MyHomePageState extends State<MyHomePage> {
                       },
                       shrinkWrap: true,
                     ),
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  FloatingActionButton(
-                    child: new Icon(Icons.add),
-                    focusColor: Colors.green[900],
-                    heroTag: 'IncrementButton',
-                    onPressed: () {
-                      //If the error code is valid, then increment the number of participants
-                      print('increment pressed');
-                      setState(() {
-                        //Get the number of participants and error check the value entered
-                        numParticipants =
-                            _participantCountController.text.trim();
-                        errorCode = checkInt(numParticipants.toString());
-                      });
-                      if (int.tryParse(numParticipants.toString()) != null) {
-                        participants = int.parse(numParticipants.toString());
-                        participants++;
-                        _participantCountController.text =
-                            participants.toString();
-                        createNewParticipantList();
-                      } //end if
-                    },
-                  ),
-                  FloatingActionButton(
-                    child: new Icon(Icons.remove),
-                    focusColor: Colors.green[900],
-                    heroTag: 'DecrementButton',
-                    onPressed: () {
-                      print('decrement pressed');
-                      setState(() {
-                        //Get the number of participants and error check the value entered
-                        numParticipants =
-                            _participantCountController.text.trim();
-                        errorCode = checkInt(numParticipants.toString());
-                      }); //If the error code is valid, then increment the number of participants
-                      if (int.tryParse(numParticipants.toString()) != null) {
-                        participants = int.parse(numParticipants.toString());
-                        participants--;
-                        _participantCountController.text =
-                            participants.toString();
-                        createNewParticipantList();
-                      } //end if
-                    },
-                  )
-                ],
+                children: [],
               )
               // separatorBuilder: (BuildContext context, int index) =>
               //     Divider(
@@ -242,6 +199,56 @@ class _MyHomePageState extends State<MyHomePage> {
       //   tooltip: 'Increment',
       //   child: const Icon(Icons.add),
       // ), // This trailing comma makes auto-formatting nicer for build methods.
+      floatingActionButton: Padding(
+        padding: EdgeInsets.only(left: 30),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            FloatingActionButton(
+              child: new Icon(Icons.add),
+              focusColor: Colors.green[900],
+              heroTag: 'IncrementButton',
+              onPressed: () {
+                //If the error code is valid, then increment the number of participants
+                print('increment pressed');
+                setState(() {
+                  //Get the number of participants and error check the value entered
+                  numParticipants = _participantCountController.text.trim();
+                  errorCode = checkInt(numParticipants.toString());
+                });
+                if (int.tryParse(numParticipants.toString()) != null) {
+                  participants = int.parse(numParticipants.toString());
+                  participants++;
+                  _participantCountController.text = participants.toString();
+                  createNewParticipantList();
+                } //end if
+              },
+            ),
+
+            Expanded(child: Container()),
+
+            FloatingActionButton(
+              child: new Icon(Icons.remove),
+              focusColor: Colors.green[900],
+              heroTag: 'DecrementButton',
+              onPressed: () {
+                print('decrement pressed');
+                setState(() {
+                  //Get the number of participants and error check the value entered
+                  numParticipants = _participantCountController.text.trim();
+                  errorCode = checkInt(numParticipants.toString());
+                }); //If the error code is valid, then increment the number of participants
+                if (int.tryParse(numParticipants.toString()) != null) {
+                  participants = int.parse(numParticipants.toString());
+                  participants--;
+                  _participantCountController.text = participants.toString();
+                  createNewParticipantList();
+                } //end if
+              },
+            )
+          ],
+        ),
+      ),
     );
   }
 }
