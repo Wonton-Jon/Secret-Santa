@@ -154,6 +154,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       shrinkWrap: true,
                     ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   FloatingActionButton(
                     child: new Icon(Icons.add),
@@ -161,21 +163,29 @@ class _MyHomePageState extends State<MyHomePage> {
                     heroTag: 'IncrementButton',
                     onPressed: () {
                       //If the error code is valid, then increment the number of participants
+                      print('increment pressed');
+                      numParticipants = _participantCountController.text.trim();
                       if (int.tryParse(numParticipants.toString()) != null) {
+                        participants = int.parse(numParticipants.toString());
                         participants++;
-                        _participantCountController.text = participants.toString();
+                        _participantCountController.text =
+                            participants.toString();
                       } //end if
                     },
                   ),
                   FloatingActionButton(
-                    child: new Icon(Icons.add),
+                    child: new Icon(Icons.remove),
                     focusColor: Colors.green[900],
                     heroTag: 'DecrementButton',
                     onPressed: () {
+                      print('decrement pressed');
+                      numParticipants = _participantCountController.text.trim();
                       //If the error code is valid, then increment the number of participants
                       if (int.tryParse(numParticipants.toString()) != null) {
+                        participants = int.parse(numParticipants.toString());
                         participants--;
-                        _participantCountController.text = participants.toString();
+                        _participantCountController.text =
+                            participants.toString();
                       } //end if
                     },
                   )
