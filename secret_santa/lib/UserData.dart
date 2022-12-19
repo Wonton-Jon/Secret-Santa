@@ -11,49 +11,17 @@ class UserData {
       TextEditingController(); //Controller for email text field
 
   //Create text field for the name and email
-  TextField nameTextField = TextField(
-    onChanged: (value) {
-      print('vlaue is $value');
-    },
-    decoration: InputDecoration(
-      hintText: 'Enter person\'s name.',
-      contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.all(Radius.circular(32.0)),
-      ),
-      enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.lightBlueAccent, width: 1.0),
-        borderRadius: BorderRadius.all(Radius.circular(32.0)),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.lightBlueAccent, width: 2.0),
-        borderRadius: BorderRadius.all(Radius.circular(32.0)),
-      ),
-    ),
-  );
-  TextField emailTextField = TextField(
-    onChanged: (value) {
-      print('vlaue is $value');
-    },
-    decoration: InputDecoration(
-      hintText: 'Enter person\'s email.',
-      contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.all(Radius.circular(32.0)),
-      ),
-      enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.lightBlueAccent, width: 1.0),
-        borderRadius: BorderRadius.all(Radius.circular(32.0)),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.lightBlueAccent, width: 2.0),
-        borderRadius: BorderRadius.all(Radius.circular(32.0)),
-      ),
-    ),
-  );
+  TextField nameTextField = TextField();
+  TextField emailTextField = TextField();
 
+  //===========================================================================
+  // CONSTRUCTOR
+  //===========================================================================
   UserData({this.name, this.email});
 
+  //===========================================================================
+  // ACCESSORS
+  //===========================================================================
   //Get the user data from the text fields
   Future getUserData() async {
     name = _nameController.text.trim();
@@ -63,20 +31,79 @@ class UserData {
   Widget getContainer() {
     return Padding(
       padding: EdgeInsets.all(0.0),
-    
       child: Container(
         child: Column(
-          children: [nameTextField, emailTextField],
+          children: [
+            nameTextField = TextField(
+              onChanged: (value) {
+                print('vlaue is $value');
+                name = _nameController.text.trim();
+                print('name  is $name');
+              },
+              controller: _nameController,
+              decoration: InputDecoration(
+                hintText: 'Enter person\'s name.',
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide:
+                      BorderSide(color: Colors.lightBlueAccent, width: 1.0),
+                  borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide:
+                      BorderSide(color: Colors.lightBlueAccent, width: 2.0),
+                  borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                ),
+              ),
+            ),
+            emailTextField = TextField(
+              onChanged: (value) {
+                print('calue is $value');
+                email = _emailController.text.trim();
+                print('email  is $email');
+              },
+              controller: _emailController,
+              decoration: InputDecoration(
+                hintText: 'Enter person\'s email.',
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide:
+                      BorderSide(color: Colors.lightBlueAccent, width: 1.0),
+                  borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide:
+                      BorderSide(color: Colors.lightBlueAccent, width: 2.0),
+                  borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                ),
+              ),
+            )
+          ],
         ),
         margin: EdgeInsets.all(20),
         padding: EdgeInsets.all(0.0),
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.red)
-        ),
+        decoration: BoxDecoration(border: Border.all(color: Colors.red)),
         width: 10,
         height: 100,
-        
       ),
     );
+  }
+
+  //Get the object data as a string
+  @override
+  String toString() {
+    StringBuffer string = StringBuffer();
+
+    string.write('name:  $name\n');
+    string.write('email: $email\n\n');
+    return string.toString();
   }
 }
