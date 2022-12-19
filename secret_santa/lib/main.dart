@@ -48,33 +48,38 @@ class _MyHomePageState extends State<MyHomePage> {
 
     //If the value entered is valid, then parse and initialize the list of participants
     if (errorCode == ERROR_CODE.VALID) {
-      participants = int.parse(numParticipants);
-
-      //Creaete a temporary list to hold the original values so that when the list size changes, the older values are still persistent
-      List<UserData> tempList = participantContainers;
-
-      //Clear the list to reset the list size
-      participantContainers = [];
-
-      //Load the list of older values into the list of new values
-
-      for (int i = 0; i < tempList.length && i < participants; i++) {
-        participantContainers.add(tempList[i]);
-      } //end for
-
-      int unadded = participants -
-          tempList.length; //Number of users that need to be added to list
-
-      //Add new users to list if the list size is less than the number specified
-      for (int i = 0;
-          i < unadded && participantContainers.length < participants;
-          i++) {
-        UserData newUser = UserData(name: "", email: "");
-        participantContainers.add(newUser);
-      } //end for
+      createNewParticipantList();
     } //end if
 
     return errorCode;
+  }
+
+  void createNewParticipantList() {
+    numParticipants = _participantCountController.text.trim();
+    participants = int.parse(numParticipants.toString());
+
+    //Creaete a temporary list to hold the original values so that when the list size changes, the older values are still persistent
+    List<UserData> tempList = participantContainers;
+
+    //Clear the list to reset the list size
+    participantContainers = [];
+
+    //Load the list of older values into the list of new values
+
+    for (int i = 0; i < tempList.length && i < participants; i++) {
+      participantContainers.add(tempList[i]);
+    } //end for
+
+    int unadded = participants -
+        tempList.length; //Number of users that need to be added to list
+
+    //Add new users to list if the list size is less than the number specified
+    for (int i = 0;
+        i < unadded && participantContainers.length < participants;
+        i++) {
+      UserData newUser = UserData(name: "", email: "");
+      participantContainers.add(newUser);
+    } //end for
   }
 
   @override
@@ -104,32 +109,49 @@ class _MyHomePageState extends State<MyHomePage> {
                     border: UnderlineInputBorder(),
                     labelText: 'Enter Number of Participants',
                   ),
-                  onFieldSubmitted: (numParticipants) {
-                    print('start onFieldSubmitted()');
+                  // onFieldSubmitted: (numParticipants) {
+                  //   print('start onchanged()');
 
-                    //If the error code is valid, then parse it
+                  //   //If the error code is valid, then parse it
+                  //   if (errorCode == ERROR_CODE.VALID) {
+                  //     participants = int.parse(numParticipants);
+                  //   } //end if
+
+                  //   print('participants = $participants');
+                  //   print('errormessage = ${getErrorMessage(errorCode)}');
+                  //   print('end onFieldSubmitted()');
+                  // },
+                  // onEditingComplete: () {
+                  //   print('start onEditingComplete()');
+                  //   //Clear the list view before creating a new one
+
+                  //   numParticipants = _participantCountController.text.trim();
+                  //   errorCheck(numParticipants);
+
+                  //   //If the error code is valid, then parse it
+                  //   if (errorCode == ERROR_CODE.VALID)
+                  //     participants = int.parse(numParticipants.toString());
+
+                  //   //If the error checking is successful, then display user data containers
+                  //   //equal to the number of users entered
+                  //   print('end onEditingComplete()');
+                  // },
+                  onChanged: (numParticipants) {
+                    print('start onchanged()');
+
+                    numParticipants = _participantCountController.text.trim();
+
+                    setState(() {
+                      //Get the number of participants and error check the value entered
+                      errorCode = checkInt(numParticipants.toString());
+                    });
                     if (errorCode == ERROR_CODE.VALID) {
-                      participants = int.parse(numParticipants);
+                      participants = int.parse(numParticipants.toString());
+                      createNewParticipantList();
                     } //end if
 
                     print('participants = $participants');
                     print('errormessage = ${getErrorMessage(errorCode)}');
-                    print('end onFieldSubmitted()');
-                  },
-                  onEditingComplete: () {
-                    print('start onEditingComplete()');
-                    //Clear the list view before creating a new one
-
-                    numParticipants = _participantCountController.text.trim();
-                    errorCheck(numParticipants);
-
-                    //If the error code is valid, then parse it
-                    if (errorCode == ERROR_CODE.VALID)
-                      participants = int.parse(numParticipants.toString());
-
-                    //If the error checking is successful, then display user data containers
-                    //equal to the number of users entered
-                    print('end onEditingComplete()');
                   },
                 ),
               ),
@@ -154,8 +176,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       shrinkWrap: true,
                     ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   FloatingActionButton(
                     child: new Icon(Icons.add),
@@ -164,12 +186,18 @@ class _MyHomePageState extends State<MyHomePage> {
                     onPressed: () {
                       //If the error code is valid, then increment the number of participants
                       print('increment pressed');
-                      numParticipants = _participantCountController.text.trim();
+                      setState(() {
+                        //Get the number of participants and error check the value entered
+                        numParticipants =
+                            _participantCountController.text.trim();
+                        errorCode = checkInt(numParticipants.toString());
+                      });
                       if (int.tryParse(numParticipants.toString()) != null) {
                         participants = int.parse(numParticipants.toString());
                         participants++;
                         _participantCountController.text =
                             participants.toString();
+                        createNewParticipantList();
                       } //end if
                     },
                   ),
@@ -179,13 +207,18 @@ class _MyHomePageState extends State<MyHomePage> {
                     heroTag: 'DecrementButton',
                     onPressed: () {
                       print('decrement pressed');
-                      numParticipants = _participantCountController.text.trim();
-                      //If the error code is valid, then increment the number of participants
+                      setState(() {
+                        //Get the number of participants and error check the value entered
+                        numParticipants =
+                            _participantCountController.text.trim();
+                        errorCode = checkInt(numParticipants.toString());
+                      }); //If the error code is valid, then increment the number of participants
                       if (int.tryParse(numParticipants.toString()) != null) {
                         participants = int.parse(numParticipants.toString());
                         participants--;
                         _participantCountController.text =
                             participants.toString();
+                        createNewParticipantList();
                       } //end if
                     },
                   )
