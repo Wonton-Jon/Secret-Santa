@@ -36,21 +36,38 @@ class _MyHomePageState extends State<MyHomePage> {
   final _participantCountController = TextEditingController();
   String? numParticipants = "";
   int participants = 0;
-  List<UserData> particpantContainers = [];
+  List<UserData> participantContainers = [];
 
   //Return the error code of the error checked values
   Future<ERROR_CODE> errorCheck(numParticipants) async {
     setState(() {
+      //Get the number of participants and error check the value entered
       numParticipants = _participantCountController.text.trim();
       errorCode = checkInt(numParticipants);
     });
 
+    //If the value entered is valid, then parse and initialize the list of participants
     if (errorCode == ERROR_CODE.VALID) {
       participants = int.parse(numParticipants);
+
+      //Creaete a temporary list to hold the original values so that when the list size changes, the older values are still persistent
+      List<UserData> tempList = participantContainers;
+
+      //Clear the list to reset the list size
+      participantContainers = [];
+
+      //Load the list of older values into the list of new values
       for (int i = 0; i < participants; i++) {
-        UserData newUser = UserData(name: "", email: "");
-        particpantContainers.add(newUser);
+        participantContainers.add(tempList[i]);
       }//end for
+
+      int unadded = tempList.length - participantContainers.length; //Number of users that need to be added to list
+
+      //Add new users to list if the list size is less than the number specified
+      for (int i = 0; i < unadded; i++) {
+        UserData newUser = UserData(name: "", email: "");
+        participantContainers.add(newUser);
+      } //end for
     } //end if
 
     return errorCode;
@@ -61,7 +78,10 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text(widget.title, style: TextStyle(fontSize: 30),),
+        title: Text(
+          widget.title,
+          style: TextStyle(fontSize: 30),
+        ),
         centerTitle: true,
         backgroundColor: Colors.green[900],
         foregroundColor: Colors.white,
@@ -72,7 +92,8 @@ class _MyHomePageState extends State<MyHomePage> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                 child: TextFormField(
                   controller: _participantCountController,
                   decoration: const InputDecoration(
@@ -80,23 +101,37 @@ class _MyHomePageState extends State<MyHomePage> {
                     labelText: 'Enter Number of Participants',
                   ),
                   onFieldSubmitted: (numParticipants) {
+                    print('start onFieldSubmitted()');
+
                     //If the error code is valid, then parse it
-                    if (errorCode == ERROR_CODE.VALID)
+                    if (errorCode == ERROR_CODE.VALID) {
                       participants = int.parse(numParticipants);
-      
+                    } //end if
+
                     print('participants = $participants');
                     print('errormessage = ${getErrorMessage(errorCode)}');
+                    print('end onFieldSubmitted()');
                   },
                   onEditingComplete: () {
+                    print('start onEditingComplete()');
+                    //Clear the list view before creating a new one
+
+                    numParticipants = _participantCountController.text.trim();
+                    errorCheck(numParticipants);
+
+                    //If the error code is valid, then parse it
+                    if (errorCode == ERROR_CODE.VALID)
+                      participants = int.parse(numParticipants.toString());
+
                     //If the error checking is successful, then display user data containers
                     //equal to the number of users entered
-                    errorCheck(numParticipants);
+                    print('end onEditingComplete()');
                   },
                 ),
               ),
               Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 25.0, vertical: 0.0),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 25.0, vertical: 0.0),
                   child: Text(
                     getErrorMessage(errorCode),
                     style: TextStyle(
@@ -106,22 +141,23 @@ class _MyHomePageState extends State<MyHomePage> {
                   )),
               participants == 0
                   ? Container()
-                  : ListView.separated(
-                    physics: NeverScrollableScrollPhysics(),
-                      itemCount: particpantContainers.length,
+                  : ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: participantContainers.length,
                       itemBuilder: (context, index) {
-                        return particpantContainers[index].getContainer();
+                        return participantContainers[index].getContainer();
                       },
                       shrinkWrap: true,
-                      separatorBuilder: (BuildContext context, int index) =>
-                          Divider(
-                        height: 8,
-                        thickness: 1,
-                        color: Colors.transparent,
-                        endIndent: 10,
-                        indent: 10,
-                      ),
-                    ), //Put floating action button to add user underneath the last item in the list view
+                    )
+              // separatorBuilder: (BuildContext context, int index) =>
+              //     Divider(
+              //   height: 8,
+              //   thickness: 1,
+              //   color: Colors.transparent,
+              //   endIndent: 10,
+              //   indent: 10,
+              // ),
+              , //Put floating action button to add user underneath the last item in the list view
             ],
           ),
         ),
