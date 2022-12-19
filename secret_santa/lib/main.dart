@@ -109,49 +109,24 @@ class _MyHomePageState extends State<MyHomePage> {
                     border: UnderlineInputBorder(),
                     labelText: 'Enter Number of Participants',
                   ),
-                  // onFieldSubmitted: (numParticipants) {
-                  //   print('start onchanged()');
-
-                  //   //If the error code is valid, then parse it
-                  //   if (errorCode == ERROR_CODE.VALID) {
-                  //     participants = int.parse(numParticipants);
-                  //   } //end if
-
-                  //   print('participants = $participants');
-                  //   print('errormessage = ${getErrorMessage(errorCode)}');
-                  //   print('end onFieldSubmitted()');
-                  // },
-                  // onEditingComplete: () {
-                  //   print('start onEditingComplete()');
-                  //   //Clear the list view before creating a new one
-
-                  //   numParticipants = _participantCountController.text.trim();
-                  //   errorCheck(numParticipants);
-
-                  //   //If the error code is valid, then parse it
-                  //   if (errorCode == ERROR_CODE.VALID)
-                  //     participants = int.parse(numParticipants.toString());
-
-                  //   //If the error checking is successful, then display user data containers
-                  //   //equal to the number of users entered
-                  //   print('end onEditingComplete()');
-                  // },
+                  //============================================================
+                  // When the value in the Textfield is changed, create the list
+                  // of participant data fields
+                  //============================================================
                   onChanged: (numParticipants) {
-                    print('start onchanged()');
-
+                    //Get the number of participants
                     numParticipants = _participantCountController.text.trim();
-
+                    
+                    //Error check the value
                     setState(() {
                       //Get the number of participants and error check the value entered
                       errorCode = checkInt(numParticipants.toString());
                     });
+                    //If the status code returns a valid value, then get the number entered
                     if (errorCode == ERROR_CODE.VALID) {
                       participants = int.parse(numParticipants.toString());
                       createNewParticipantList();
                     } //end if
-
-                    print('participants = $participants');
-                    print('errormessage = ${getErrorMessage(errorCode)}');
                   },
                 ),
               ),
@@ -165,6 +140,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         fontWeight: FontWeight.w500,
                         color: Colors.red),
                   )),
+              //If the number of participants is zero, create an empty container,
+              //Otherwise create the list of data
               participants == 0
                   ? Container()
                   : ListView.builder(
@@ -175,48 +152,37 @@ class _MyHomePageState extends State<MyHomePage> {
                       },
                       shrinkWrap: true,
                     ),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [],
-              )
-              // separatorBuilder: (BuildContext context, int index) =>
-              //     Divider(
-              //   height: 8,
-              //   thickness: 1,
-              //   color: Colors.transparent,
-              //   endIndent: 10,
-              //   indent: 10,
-              // ),
-              , //Put floating action button to add user underneath the last item in the list view
             ],
           ),
         ),
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: errorCheck(numParticipants),
-      //   tooltip: 'Increment',
-      //   child: const Icon(Icons.add),
-      // ), // This trailing comma makes auto-formatting nicer for build methods.
+      //========================================================================
+      // Placement for the increment and decrement buttons
+      //========================================================================
       floatingActionButton: Padding(
         padding: EdgeInsets.only(left: 30),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
+            //==================================================================
+            // Button will increment the number of participants entered
+            //==================================================================
             FloatingActionButton(
               child: new Icon(Icons.add),
               focusColor: Colors.green[900],
               heroTag: 'IncrementButton',
               onPressed: () {
-                //If the error code is valid, then increment the number of participants
-                print('increment pressed');
+                //Set the state of the values to reload the widgets
                 setState(() {
                   //Get the number of participants and error check the value entered
                   numParticipants = _participantCountController.text.trim();
                   errorCode = checkInt(numParticipants.toString());
                 });
-                if (int.tryParse(numParticipants.toString()) != null) {
+
+                //If the errorcode shows the value entered is valid,
+                //Then get the number of participants and increment it
+                //Create the list of participants
+                if (errorCode == ERROR_CODE.VALID) {
                   participants = int.parse(numParticipants.toString());
                   participants++;
                   _participantCountController.text = participants.toString();
@@ -227,17 +193,24 @@ class _MyHomePageState extends State<MyHomePage> {
 
             Expanded(child: Container()),
 
+            //==================================================================
+            // Button will decrement the number of participants entered
+            //==================================================================
             FloatingActionButton(
               child: new Icon(Icons.remove),
               focusColor: Colors.green[900],
               heroTag: 'DecrementButton',
               onPressed: () {
-                print('decrement pressed');
+                //Set the state of the values to reload the widgets
                 setState(() {
                   //Get the number of participants and error check the value entered
                   numParticipants = _participantCountController.text.trim();
                   errorCode = checkInt(numParticipants.toString());
                 }); //If the error code is valid, then increment the number of participants
+                
+                //If the errorcode shows the value entered is valid,
+                //Then get the number of participants and decrement it
+                //Create the list of participants
                 if (int.tryParse(numParticipants.toString()) != null) {
                   participants = int.parse(numParticipants.toString());
                   participants--;
