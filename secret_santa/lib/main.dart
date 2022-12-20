@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:secret_santa/ErrorCheck.dart';
+import 'package:secret_santa/Randomize.dart';
 import 'UserData.dart';
+
+List<UserData> participantContainers = [];
 
 void main() {
   runApp(const MyApp());
@@ -36,14 +39,13 @@ class _MyHomePageState extends State<MyHomePage> {
   final _participantCountController = TextEditingController();
   String? numParticipants = "";
   int participants = 0;
-  List<UserData> participantContainers = [];
 
   //Return the error code of the error checked values
-  Future<ERROR_CODE> errorCheck(numParticipants) async {
+  Future<ERROR_CODE> errorCheck() async {
     setState(() {
       //Get the number of participants and error check the value entered
       numParticipants = _participantCountController.text.trim();
-      errorCode = checkInt(numParticipants);
+      errorCode = checkInt(numParticipants.toString());
     });
 
     //If the value entered is valid, then parse and initialize the list of participants
@@ -116,7 +118,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   onChanged: (numParticipants) {
                     //Get the number of participants
                     numParticipants = _participantCountController.text.trim();
-                    
+
                     //Error check the value
                     setState(() {
                       //Get the number of participants and error check the value entered
@@ -194,6 +196,28 @@ class _MyHomePageState extends State<MyHomePage> {
             Expanded(child: Container()),
 
             //==================================================================
+            // Button will assign secret santas to valid participants
+            //==================================================================
+            FloatingActionButton(
+              child: new Icon(Icons.check),
+              focusColor: Colors.green[900],
+              heroTag: 'FinishedButton',
+              onPressed: () {
+                //Set the state of the values to reload the widgets
+                errorCode = checkInt(_participantCountController.text.trim());
+
+                //If the errorcode shows the value entered is valid,
+                //Then get the number of participants and increment it
+                //Create the list of participants
+                if (errorCode == ERROR_CODE.VALID) {
+                  randomize(participantContainers);
+                } //end if
+              },
+            ),
+
+            Expanded(child: Container()),
+
+            //==================================================================
             // Button will decrement the number of participants entered
             //==================================================================
             FloatingActionButton(
@@ -207,7 +231,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   numParticipants = _participantCountController.text.trim();
                   errorCode = checkInt(numParticipants.toString());
                 }); //If the error code is valid, then increment the number of participants
-                
+
                 //If the errorcode shows the value entered is valid,
                 //Then get the number of participants and decrement it
                 //Create the list of participants
