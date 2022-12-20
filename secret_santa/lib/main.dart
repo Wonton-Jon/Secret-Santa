@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Secret Santaaaaa',
       theme: ThemeData(
-        primarySwatch: Colors.green,
+        primaryColor: Colors.green[900],
       ),
       home: const MyHomePage(title: 'Secwet Santwa ^u^ :D'),
     );
@@ -184,7 +184,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 //If the errorcode shows the value entered is valid,
                 //Then get the number of participants and increment it
                 //Create the list of participants
-                if (errorCode == ERROR_CODE.VALID) {
+                if (int.tryParse(numParticipants.toString().trim()) != null) {
                   participants = int.parse(numParticipants.toString());
                   participants++;
                   _participantCountController.text = participants.toString();
@@ -203,16 +203,10 @@ class _MyHomePageState extends State<MyHomePage> {
               focusColor: Colors.green[900],
               heroTag: 'RandomizeButton',
               onPressed: () {
-                print("randomize button pressed");
                 //Set the state of the values to reload the widgets
                 errorCode = checkInt(_participantCountController.text.trim());
 
-                //If the errorcode shows the value entered is valid,
-                //Then get the number of participants and increment it
-                //Create the list of participants
-                if (errorCode == ERROR_CODE.VALID) {
-                  randomize(participantContainers);
-                } //end if
+                if (errorCode == ERROR_CODE.VALID) showAlertDialog(context);
               },
             ),
 
@@ -247,6 +241,79 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
+    );
+  }
+
+
+  //============================================================================
+  // Show the alert dialog when the user confirms the participants
+  //============================================================================
+  showAlertDialog(BuildContext context) {
+    // set up the buttons
+    Widget cancelButton = TextButton(
+      child: Text("Hold up"),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+    Widget confirmButton = TextButton(
+        child: Text("ASSIGN THE SANTASSSSSS"),
+        onPressed: () {
+          print("randomize button pressed");
+
+          //If the errorcode shows the value entered is valid,
+          //Then get the number of participants and increment it
+          //Create the list of participants
+          if (errorCode == ERROR_CODE.VALID) {
+            randomize(participantContainers);
+          } //end if
+          Navigator.pop(context);
+        });
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Is this everyone?"),
+      content: RichText(
+        text: TextSpan(
+          children: <TextSpan>[
+            TextSpan(
+              text: '🦌🎁⛄🎅', // emoji characters
+              style: TextStyle(
+                fontFamily: 'EmojiOne',
+              ),
+            ),
+            TextSpan(
+              text: 'Secret Santas will be assigned',
+              style: TextStyle(fontFamily: "Raleway", color: Colors.black),
+            ),
+            TextSpan(
+              text: '🎅⛄🎁🦌', // emoji characters
+              style: TextStyle(
+                fontFamily: 'EmojiOne',
+              ),
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        
+        Row(
+          children: [
+            cancelButton,
+            Expanded(child: Container()),
+            confirmButton,
+          ],
+        ),
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 }
