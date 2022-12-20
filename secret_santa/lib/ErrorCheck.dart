@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'package:flutter/material.dart';
 
 enum ERROR_CODE { VALID, EMPTY_TEXT, INVALID_INT, OUT_OF_BOUNDS }
 
@@ -25,7 +24,7 @@ ERROR_CODE checkInt(String value) {
     errorCode = ERROR_CODE.OUT_OF_BOUNDS;
 
   //If the string is empty, set error code
-  if (value.length == 0) errorCode = ERROR_CODE.EMPTY_TEXT;
+  if (value.trim().length == 0) errorCode = ERROR_CODE.EMPTY_TEXT;
 
   print("errorCode = ${errorCode.toString()}");
 
@@ -60,9 +59,4 @@ getErrorMessage(ERROR_CODE error) {
   } //end switch
 
   return errorMessage;
-  // return Text(
-  //   errorMessage,
-  //   style:
-  //       TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: Colors.red),
-  // );
 }

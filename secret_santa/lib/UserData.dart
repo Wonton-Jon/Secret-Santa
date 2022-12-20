@@ -5,6 +5,7 @@ enum TEXTFIELD_ID { NAME, EMAIL }
 class UserData {
   String? name; //User's name
   String? email; //User's email
+  String? assignee; //Person that you are assigned to for secret santa
   TextEditingController _nameController =
       TextEditingController(); //Controller for name text field
   TextEditingController _emailController =
