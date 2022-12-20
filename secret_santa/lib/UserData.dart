@@ -6,7 +6,7 @@ enum TEXTFIELD_ID { NAME, EMAIL }
 class UserData {
   String? name; //User's name
   String? email; //User's email
-  String? assignee; //Person that you are assigned to for secret santa
+  UserData? assignee; //Person that you are assigned to for secret santa
   TextEditingController _nameController =
       TextEditingController(); //Controller for name text field
   TextEditingController _emailController =
@@ -103,7 +103,7 @@ class UserData {
 
     string.write('name:  $name\n');
     string.write('email: $email\n');
-    string.write('assignee: $assignee\n\n');
+    string.write('assignee: ${assignee.toString()}\n\n');
 
     return string.toString();
   }

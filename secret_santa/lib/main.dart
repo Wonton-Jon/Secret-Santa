@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:secret_santa/ErrorCheck.dart';
 import 'package:secret_santa/Randomize.dart';
 import 'UserData.dart';
+import 'Email.dart';
 
 List<UserData> participantList = [];
 Color? themeColor = Colors.green[900];
@@ -263,6 +264,7 @@ class _MyHomePageState extends State<MyHomePage> {
           //Then randomize participants and assign secret santas
           if (errorCode == ERROR_CODE.VALID) {
             participantList = assignSecretSantas(randomize(participantList));
+            composeAndSendEmails(participantList);
           } //end if
           Navigator.pop(context);
         });
