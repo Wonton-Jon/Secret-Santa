@@ -201,8 +201,9 @@ class _MyHomePageState extends State<MyHomePage> {
             FloatingActionButton(
               child: new Icon(Icons.check),
               focusColor: Colors.green[900],
-              heroTag: 'FinishedButton',
+              heroTag: 'RandomizeButton',
               onPressed: () {
+                print("randomize button pressed");
                 //Set the state of the values to reload the widgets
                 errorCode = checkInt(_participantCountController.text.trim());
 

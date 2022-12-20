@@ -7,7 +7,7 @@ List<UserData> randomize(List<UserData> participants) {
       element.name.toString().trim() == "" ||
       element.email.toString().trim() == "");
 
-  List<UserData> tempList = participants;
+  List<UserData> tempList = participants.toList();
   List<UserData> randomizedList = []; //List to hold the participants
   Random randomizer = Random(DateTime.now()
       .microsecondsSinceEpoch); //Randomizes based on current time in milliseconds
@@ -15,7 +15,7 @@ List<UserData> randomize(List<UserData> participants) {
   //While the participants list is not empty, get a random number to select the giftee
   while (tempList.length > 0) {
     //Get the random number
-    int randomNum = randomizer.nextInt(participants.length);
+    int randomNum = randomizer.nextInt(tempList.length);
 
     randomizedList.add(tempList[randomNum]);
     tempList.removeAt(randomNum);
