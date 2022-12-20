@@ -5,7 +5,7 @@ import 'UserData.dart';
 import 'Email.dart';
 
 List<UserData> participantList = [];
-Color? themeColor = Colors.green[900];
+Color? themeColor = Colors.green[800];
 
 void main() {
   runApp(const MyApp());
@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: themeColor,
       ),
-      home: const MyHomePage(title: 'Secwet Santwa ^u^ :D'),
+      home: const MyHomePage(title: 'Secwet Santwa ^u^'),
     );
   }
 }
@@ -171,7 +171,7 @@ class _MyHomePageState extends State<MyHomePage> {
             //==================================================================
             FloatingActionButton(
               child: new Icon(Icons.add),
-              focusColor: themeColor,
+              backgroundColor: themeColor,
               heroTag: 'IncrementButton',
               onPressed: () {
                 //Set the state of the values to reload the widgets
@@ -200,7 +200,7 @@ class _MyHomePageState extends State<MyHomePage> {
             //==================================================================
             FloatingActionButton(
               child: new Icon(Icons.check),
-              focusColor: themeColor,
+              backgroundColor: themeColor,
               heroTag: 'RandomizeButton',
               onPressed: () {
                 //Set the state of the values to reload the widgets
@@ -217,7 +217,7 @@ class _MyHomePageState extends State<MyHomePage> {
             //==================================================================
             FloatingActionButton(
               child: new Icon(Icons.remove),
-              focusColor: themeColor,
+              backgroundColor: themeColor,
               heroTag: 'DecrementButton',
               onPressed: () {
                 //Set the state of the values to reload the widgets

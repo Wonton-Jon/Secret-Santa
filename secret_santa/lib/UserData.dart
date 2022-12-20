@@ -103,7 +103,8 @@ class UserData {
 
     string.write('name:  $name\n');
     string.write('email: $email\n');
-    string.write('assignee: ${assignee.toString()}\n\n');
+    string.write('assignee name: ${assignee!.name}\n\n');
+    string.write('assignee email: ${assignee!.email}\n\n');
 
     return string.toString();
   }

@@ -24,15 +24,23 @@ Future composeAndSendEmails(List<UserData> participants) async {
 
     //end testing
 
-    // await FlutterEmailSender.send(Email(
-    //   body: 'Hello there ${participants[i].name}!\n'
-    //       'You have been given the role of being ${participants[i].assignee!.name.toString()}\'s Secret Santa !!!',
-    //   subject: 'Secret Santaaaaaa',
-    //   recipients: [participants[i].email.toString()],
-    //   cc: [],
-    //   bcc: [],
-    //   attachmentPaths: [],
-    //   isHTML: false,
-    // ));
+    await FlutterEmailSender.send(Email(
+      body: 'Hello there ${participants[i].name}!\n'
+          'You have been given the role of being ${participants[i].assignee!.name.toString()}\'s Secret Santa !!!',
+      subject: 'Secret Santaaaaaa',
+      recipients: [participants[i].email.toString()],
+      cc: [],
+      bcc: [],
+      attachmentPaths: [],
+      isHTML: false,
+    ));
   } //end for
+
+  '''
+  jmaguirre111@gmail.com
+  jomaguir@ucsc.edu
+  thechowshims456@gmail.com
+  Megalodon6e23@gmail.com
+
+  ''';
 }
