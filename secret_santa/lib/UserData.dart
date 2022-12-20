@@ -104,7 +104,9 @@ class UserData {
     StringBuffer string = StringBuffer();
 
     string.write('name:  $name\n');
-    string.write('email: $email\n\n');
+    string.write('email: $email\n');
+    string.write('assignee: $assignee\n\n');
+
     return string.toString();
   }
 }

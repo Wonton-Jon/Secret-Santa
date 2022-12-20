@@ -1,6 +1,7 @@
 import 'UserData.dart';
 import 'dart:math';
 
+//WIll randomize the participants into a list
 List<UserData> randomize(List<UserData> participants) {
   //Remove items from the list if the name or email has not been entered
   participants.removeWhere((element) =>
@@ -21,15 +22,22 @@ List<UserData> randomize(List<UserData> participants) {
     tempList.removeAt(randomNum);
   } //end for
 
-  print('first list');
+  return randomizedList;
+}
+
+//Assigns the participants to the person listed after them.
+//Ex: participant[0] is assigned participant[1], etc.
+//participant[participants.length - 1] is assigned participant[0] i.e. the last person
+//in the list is assigned the first person
+List<UserData> assignSecretSantas(List<UserData> participants) {
+  for (int i = 0; i < participants.length - 1; i++) {
+    participants[i].assignee = participants[i + 1].name;
+  } //end for
+  participants[participants.length - 1].assignee = participants[0].name;
+
   for (int i = 0; i < participants.length; i++) {
     print('item $i: ${participants[i].toString()}');
   } //end for
 
-  print('random list');
-  for (int i = 0; i < randomizedList.length; i++) {
-    print('item $i: ${randomizedList[i].toString()}');
-  } //end for
-
-  return randomizedList;
+  return participants;
 }

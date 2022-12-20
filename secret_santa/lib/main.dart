@@ -3,7 +3,7 @@ import 'package:secret_santa/ErrorCheck.dart';
 import 'package:secret_santa/Randomize.dart';
 import 'UserData.dart';
 
-List<UserData> participantContainers = [];
+List<UserData> participantList = [];
 
 void main() {
   runApp(const MyApp());
@@ -61,26 +61,24 @@ class _MyHomePageState extends State<MyHomePage> {
     participants = int.parse(numParticipants.toString());
 
     //Creaete a temporary list to hold the original values so that when the list size changes, the older values are still persistent
-    List<UserData> tempList = participantContainers;
+    List<UserData> tempList = participantList;
 
     //Clear the list to reset the list size
-    participantContainers = [];
+    participantList = [];
 
     //Load the list of older values into the list of new values
 
     for (int i = 0; i < tempList.length && i < participants; i++) {
-      participantContainers.add(tempList[i]);
+      participantList.add(tempList[i]);
     } //end for
 
     int unadded = participants -
         tempList.length; //Number of users that need to be added to list
 
     //Add new users to list if the list size is less than the number specified
-    for (int i = 0;
-        i < unadded && participantContainers.length < participants;
-        i++) {
+    for (int i = 0; i < unadded && participantList.length < participants; i++) {
       UserData newUser = UserData(name: "", email: "");
-      participantContainers.add(newUser);
+      participantList.add(newUser);
     } //end for
   }
 
@@ -148,9 +146,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   ? Container()
                   : ListView.builder(
                       physics: NeverScrollableScrollPhysics(),
-                      itemCount: participantContainers.length,
+                      itemCount: participantList.length,
                       itemBuilder: (context, index) {
-                        return participantContainers[index].getContainer();
+                        return participantList[index].getContainer();
                       },
                       shrinkWrap: true,
                     ),
@@ -244,7 +242,6 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-
   //============================================================================
   // Show the alert dialog when the user confirms the participants
   //============================================================================
@@ -262,10 +259,9 @@ class _MyHomePageState extends State<MyHomePage> {
           print("randomize button pressed");
 
           //If the errorcode shows the value entered is valid,
-          //Then get the number of participants and increment it
-          //Create the list of participants
+          //Then randomize participants and assign secret santas
           if (errorCode == ERROR_CODE.VALID) {
-            randomize(participantContainers);
+            participantList = assignSecretSantas(randomize(participantList));
           } //end if
           Navigator.pop(context);
         });
@@ -296,7 +292,6 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       actions: [
-        
         Row(
           children: [
             cancelButton,
