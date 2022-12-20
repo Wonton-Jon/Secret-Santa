@@ -4,6 +4,7 @@ import 'package:secret_santa/Randomize.dart';
 import 'UserData.dart';
 
 List<UserData> participantList = [];
+Color? themeColor = Colors.green[900];
 
 void main() {
   runApp(const MyApp());
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Secret Santaaaaa',
       theme: ThemeData(
-        primaryColor: Colors.green[900],
+        primaryColor: themeColor,
       ),
       home: const MyHomePage(title: 'Secwet Santwa ^u^ :D'),
     );
@@ -92,7 +93,7 @@ class _MyHomePageState extends State<MyHomePage> {
           style: TextStyle(fontSize: 30),
         ),
         centerTitle: true,
-        backgroundColor: Colors.green[900],
+        backgroundColor: themeColor,
         foregroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
@@ -148,7 +149,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       physics: NeverScrollableScrollPhysics(),
                       itemCount: participantList.length,
                       itemBuilder: (context, index) {
-                        return participantList[index].getContainer();
+                        return participantList[index].getContainer(index);
                       },
                       shrinkWrap: true,
                     ),
@@ -169,7 +170,7 @@ class _MyHomePageState extends State<MyHomePage> {
             //==================================================================
             FloatingActionButton(
               child: new Icon(Icons.add),
-              focusColor: Colors.green[900],
+              focusColor: themeColor,
               heroTag: 'IncrementButton',
               onPressed: () {
                 //Set the state of the values to reload the widgets
@@ -198,7 +199,7 @@ class _MyHomePageState extends State<MyHomePage> {
             //==================================================================
             FloatingActionButton(
               child: new Icon(Icons.check),
-              focusColor: Colors.green[900],
+              focusColor: themeColor,
               heroTag: 'RandomizeButton',
               onPressed: () {
                 //Set the state of the values to reload the widgets
@@ -215,7 +216,7 @@ class _MyHomePageState extends State<MyHomePage> {
             //==================================================================
             FloatingActionButton(
               child: new Icon(Icons.remove),
-              focusColor: Colors.green[900],
+              focusColor: themeColor,
               heroTag: 'DecrementButton',
               onPressed: () {
                 //Set the state of the values to reload the widgets
