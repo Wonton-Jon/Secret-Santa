@@ -3,6 +3,8 @@ import 'package:secret_santa/main.dart';
 
 enum TEXTFIELD_ID { NAME, EMAIL }
 
+const double TEXT_FIELD_RADIUS = 15.0;
+
 class UserData {
   String? name; //User's name
   String? email; //User's email
@@ -45,19 +47,21 @@ class UserData {
               },
               controller: _nameController,
               decoration: InputDecoration(
+                fillColor: Colors.white70,
+                filled: true,
                 hintText: 'Enter Santa #${index + 1}\'s name',
                 contentPadding:
                     EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                  borderRadius: BorderRadius.all(Radius.circular(TEXT_FIELD_RADIUS)),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: themeColor!, width: 1.0),
-                  borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                  borderRadius: BorderRadius.all(Radius.circular(TEXT_FIELD_RADIUS)),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: themeColor!, width: 2.0),
-                  borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                  borderRadius: BorderRadius.all(Radius.circular(TEXT_FIELD_RADIUS)),
                 ),
               ),
             ),
@@ -70,19 +74,21 @@ class UserData {
               },
               controller: _emailController,
               decoration: InputDecoration(
+                fillColor: Colors.white70,
+                filled: true,
                 hintText: 'Enter Santa #${index + 1}\'s email',
                 contentPadding:
                     EdgeInsets.symmetric(vertical: 5.0, horizontal: 20.0),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                  borderRadius: BorderRadius.all(Radius.circular(TEXT_FIELD_RADIUS)),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: themeColor!, width: 1.0),
-                  borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                  borderRadius: BorderRadius.all(Radius.circular(TEXT_FIELD_RADIUS)),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: themeColor!, width: 2.0),
-                  borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                  borderRadius: BorderRadius.all(Radius.circular(TEXT_FIELD_RADIUS)),
                 ),
               ),
             )

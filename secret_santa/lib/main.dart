@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:secret_santa/ErrorCheck.dart';
 import 'package:secret_santa/Randomize.dart';
@@ -88,68 +86,78 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      appBar: AppBar(
-        title: Text(
-          widget.title,
-          style: TextStyle(fontSize: 30),
+    return Stack(
+      children: [
+        Image.asset(
+            "assets\\Wonton Background.png",
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            fit: BoxFit.cover,
+          ),
+        Scaffold(
+        backgroundColor: Colors.transparent,
+        resizeToAvoidBottomInset: true,
+        appBar: AppBar(
+          title: Text(
+            widget.title,
+            style: TextStyle(fontSize: 30),
+          ),
+          centerTitle: true,
+          backgroundColor: themeColor,
+          foregroundColor: Colors.white,
         ),
-        centerTitle: true,
-        backgroundColor: themeColor,
-        foregroundColor: Colors.white,
-      ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              getParticpantTextField(),
-              printErrorMessage(),
-              //If the number of participants is zero, create an empty container,
-              //Otherwise create the list of data
-              participants == 0
-                  ? Container()
-                  : Container(
-                      height: 550,
-                      decoration: BoxDecoration(
-                          color: Colors.transparent,
-                          border:
-                              Border.all(color: Colors.transparent, width: 1.5),
-                          borderRadius: BorderRadius.circular(24)),
-                      child: ListView.builder(
-                        physics: AlwaysScrollableScrollPhysics(),
-                        itemCount: participantList.length,
-                        itemBuilder: (context, index) {
-                          return participantList[index].getContainer(index);
-                        },
-                        shrinkWrap: true,
+        body: SingleChildScrollView(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                getParticpantTextField(),
+                printErrorMessage(),
+                //If the number of participants is zero, create an empty container,
+                //Otherwise create the list of data
+                participants == 0
+                    ? Container()
+                    : Container(
+                        height: 550,
+                        width: MediaQuery.of(context).size.width - 10,
+                        decoration: BoxDecoration(
+                            color: Colors.transparent,
+                            border:
+                                Border.all(color: Colors.black87, width: 1.3),
+                            borderRadius: BorderRadius.circular(24)),
+                        child: ListView.builder(
+                          physics: AlwaysScrollableScrollPhysics(),
+                          itemCount: participantList.length,
+                          itemBuilder: (context, index) {
+                            return participantList[index].getContainer(index);
+                          },
+                          shrinkWrap: true,
+                        ),
                       ),
-                    ),
-            ],
+              ],
+            ),
           ),
         ),
-      ),
-      //========================================================================
-      // Placement for the increment and decrement buttons
-      //========================================================================
-      bottomNavigationBar: 
-      SizedBox(
-        height: 68,
-        child: Padding(
-          padding: EdgeInsets.only(bottom: 10),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              getIncrementDecrementButton(false),
-              Expanded(child: Container()),
-              getRandomizeAndAssignButton(),
-              Expanded(child: Container()),
-              getIncrementDecrementButton(true)
-            ],
+        //========================================================================
+        // Placement for the increment and decrement buttons
+        //========================================================================
+        bottomNavigationBar: SizedBox(
+          height: 68,
+          child: Padding(
+            padding: EdgeInsets.only(bottom: 10),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                getIncrementDecrementButton(false),
+                Expanded(child: Container()),
+                getRandomizeAndAssignButton(),
+                Expanded(child: Container()),
+                getIncrementDecrementButton(true)
+              ],
+            ),
           ),
         ),
-      ),
+      )],
     );
   }
 
@@ -163,6 +171,8 @@ class _MyHomePageState extends State<MyHomePage> {
       child: TextFormField(
         controller: _participantCountController,
         decoration: const InputDecoration(
+          fillColor: Colors.white70,
+          filled: true,
           border: UnderlineInputBorder(),
           labelText: 'Enter Number of Participants',
         ),
@@ -191,15 +201,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget printErrorMessage() {
     return Padding(
-            padding: const EdgeInsets.symmetric(
-                horizontal: 25.0, vertical: 0.0),
-            child: Text(
-              getErrorMessage(errorCode),
-              style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.red),
-            ));
+        padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 0.0),
+        child: Text(
+          getErrorMessage(errorCode),
+          style: TextStyle(
+              fontSize: 15, fontWeight: FontWeight.w500, color: Colors.red),
+        ));
   }
 
   //==================================================================
@@ -265,13 +272,36 @@ class _MyHomePageState extends State<MyHomePage> {
   showAlertDialog(BuildContext context) {
     // set up the buttons
     Widget cancelButton = TextButton(
-      child: Text("Hold up"),
+      child: RichText(
+          text: TextSpan(
+        text: "Hold up",
+        style: TextStyle(
+            color: Colors.blue,
+            fontFamily: "Raleway",
+            fontWeight: FontWeight.bold),
+      )),
       onPressed: () {
         Navigator.pop(context);
+        FocusManager.instance.primaryFocus?.unfocus();
       },
     );
     Widget confirmButton = TextButton(
-        child: Text("ASSIGN THE SANTASSSSSS"),
+        child: RichText(
+            text: TextSpan(children: [
+          TextSpan(
+            text: "ASSIGN THE SANTASSS",
+            style: TextStyle(
+                color: Colors.blue,
+                fontFamily: "RobotoMono",
+                fontWeight: FontWeight.bold),
+          ),
+          TextSpan(
+            text: '🎅🎅🎅', // emoji characters
+            style: TextStyle(
+              fontFamily: 'EmojiOne',
+            ),
+          )
+        ])),
         onPressed: () {
           print("randomize button pressed");
 
@@ -291,17 +321,17 @@ class _MyHomePageState extends State<MyHomePage> {
         text: TextSpan(
           children: <TextSpan>[
             TextSpan(
-              text: '🦌🎁⛄🎅', // emoji characters
+              text: '⛄🎁', // emoji characters
               style: TextStyle(
                 fontFamily: 'EmojiOne',
               ),
             ),
             TextSpan(
               text: 'Secret Santas will be assigned',
-              style: TextStyle(fontFamily: "Raleway", color: Colors.black),
+              style: TextStyle(fontFamily: "RobotoMono", color: Colors.black, fontSize: 14),
             ),
             TextSpan(
-              text: '🎅⛄🎁🦌', // emoji characters
+              text: '🎁⛄', // emoji characters
               style: TextStyle(
                 fontFamily: 'EmojiOne',
               ),
