@@ -4,7 +4,6 @@ import 'package:secret_santa/Randomize.dart';
 import 'UserData.dart';
 import 'Email.dart';
 
-
 List<UserData> participantList = [];
 Color? themeColor = Colors.green[800];
 
@@ -23,7 +22,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: themeColor,
       ),
-      home: const MyHomePage(title: 'Secwet Santwa ^u^'),
+      home: const MyHomePage(title: 'Secwet Santa ^u^'),
     );
   }
 }
@@ -87,169 +86,184 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      appBar: AppBar(
-        title: Text(
-          widget.title,
-          style: TextStyle(fontSize: 30),
+    return Stack(
+      children: [
+        Image.asset(
+            "assets\\Wonton Background.png",
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            fit: BoxFit.cover,
+          ),
+        Scaffold(
+        backgroundColor: Colors.transparent,
+        resizeToAvoidBottomInset: true,
+        appBar: AppBar(
+          title: Text(
+            widget.title,
+            style: TextStyle(fontSize: 30),
+          ),
+          centerTitle: true,
+          backgroundColor: themeColor,
+          foregroundColor: Colors.white,
         ),
-        centerTitle: true,
-        backgroundColor: themeColor,
-        foregroundColor: Colors.white,
-      ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                child: TextFormField(
-                  controller: _participantCountController,
-                  decoration: const InputDecoration(
-                    border: UnderlineInputBorder(),
-                    labelText: 'Enter Number of Participants',
-                  ),
-                  //============================================================
-                  // When the value in the Textfield is changed, create the list
-                  // of participant data fields
-                  //============================================================
-                  onChanged: (numParticipants) {
-                    //Get the number of participants
-                    numParticipants = _participantCountController.text.trim();
-
-                    //Error check the value
-                    setState(() {
-                      //Get the number of participants and error check the value entered
-                      errorCode = checkInt(numParticipants.toString());
-                    });
-                    //If the status code returns a valid value, then get the number entered
-                    if (errorCode == ERROR_CODE.VALID) {
-                      participants = int.parse(numParticipants.toString());
-                      createNewParticipantList();
-                    } //end if
-                  },
-                ),
-              ),
-              Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 25.0, vertical: 0.0),
-                  child: Text(
-                    getErrorMessage(errorCode),
-                    style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.red),
-                  )),
-              //If the number of participants is zero, create an empty container,
-              //Otherwise create the list of data
-              participants == 0
-                  ? Container()
-                  : ListView.builder(
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: participantList.length,
-                      itemBuilder: (context, index) {
-                        return participantList[index].getContainer(index);
-                      },
-                      shrinkWrap: true,
-                    ),
-              Padding(
-                padding: EdgeInsets.only(left: 30),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    //==================================================================
-                    // Button will increment the number of participants entered
-                    //==================================================================
-                    FloatingActionButton(
-                      child: new Icon(Icons.add),
-                      backgroundColor: themeColor,
-                      heroTag: 'IncrementButton',
-                      onPressed: () {
-                        //Set the state of the values to reload the widgets
-                        setState(() {
-                          //Get the number of participants and error check the value entered
-                          numParticipants =
-                              _participantCountController.text.trim();
-                          errorCode = checkInt(numParticipants.toString());
-                        });
-
-                        //If the errorcode shows the value entered is valid,
-                        //Then get the number of participants and increment it
-                        //Create the list of participants
-                        if (int.tryParse(numParticipants.toString().trim()) !=
-                            null) {
-                          participants = int.parse(numParticipants.toString());
-                          participants++;
-                          _participantCountController.text =
-                              participants.toString();
-                          createNewParticipantList();
-                        } //end if
-                      },
-                    ),
-
-                    Expanded(child: Container()),
-
-                    //==================================================================
-                    // Button will assign secret santas to valid participants
-                    //==================================================================
-                    FloatingActionButton(
-                      child: new Icon(Icons.check),
-                      backgroundColor: themeColor,
-                      heroTag: 'RandomizeButton',
-                      onPressed: () {
-                        //Set the state of the values to reload the widgets
-                        errorCode =
-                            checkInt(_participantCountController.text.trim());
-
-                        if (errorCode == ERROR_CODE.VALID)
-                          showAlertDialog(context);
-                      },
-                    ),
-
-                    Expanded(child: Container()),
-
-                    //==================================================================
-                    // Button will decrement the number of participants entered
-                    //==================================================================
-                    FloatingActionButton(
-                      child: new Icon(Icons.remove),
-                      backgroundColor: themeColor,
-                      heroTag: 'DecrementButton',
-                      onPressed: () {
-                        //Set the state of the values to reload the widgets
-                        setState(() {
-                          //Get the number of participants and error check the value entered
-                          numParticipants =
-                              _participantCountController.text.trim();
-                          errorCode = checkInt(numParticipants.toString());
-                        }); //If the error code is valid, then increment the number of participants
-
-                        //If the errorcode shows the value entered is valid,
-                        //Then get the number of participants and decrement it
-                        //Create the list of participants
-                        if (int.tryParse(numParticipants.toString()) != null) {
-                          participants = int.parse(numParticipants.toString());
-                          participants--;
-                          _participantCountController.text =
-                              participants.toString();
-                          createNewParticipantList();
-                        } //end if
-                      },
-                    )
-                  ],
-                ),
-              )
-            ],
+        body: SingleChildScrollView(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                getParticpantTextField(),
+                printErrorMessage(),
+                //If the number of participants is zero, create an empty container,
+                //Otherwise create the list of data
+                participants == 0
+                    ? Container()
+                    : Container(
+                        height: 550,
+                        width: MediaQuery.of(context).size.width - 10,
+                        decoration: BoxDecoration(
+                            color: Colors.transparent,
+                            border:
+                                Border.all(color: Colors.black87, width: 1.3),
+                            borderRadius: BorderRadius.circular(24)),
+                        child: ListView.builder(
+                          physics: AlwaysScrollableScrollPhysics(),
+                          itemCount: participantList.length,
+                          itemBuilder: (context, index) {
+                            return participantList[index].getContainer(index);
+                          },
+                          shrinkWrap: true,
+                        ),
+                      ),
+              ],
+            ),
           ),
         ),
-      ),
-      //========================================================================
-      // Placement for the increment and decrement buttons
-      //========================================================================
+        //========================================================================
+        // Placement for the increment and decrement buttons
+        //========================================================================
+        bottomNavigationBar: SizedBox(
+          height: 68,
+          child: Padding(
+            padding: EdgeInsets.only(bottom: 10),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                getIncrementDecrementButton(false),
+                Expanded(child: Container()),
+                getRandomizeAndAssignButton(),
+                Expanded(child: Container()),
+                getIncrementDecrementButton(true)
+              ],
+            ),
+          ),
+        ),
+      )],
     );
+  }
+
+  //============================================================================
+  // METHOD CALLS FOR UI COMPONENTS
+  //============================================================================
+
+  Widget getParticpantTextField() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+      child: TextFormField(
+        controller: _participantCountController,
+        decoration: const InputDecoration(
+          fillColor: Colors.white70,
+          filled: true,
+          border: UnderlineInputBorder(),
+          labelText: 'Enter Number of Participants',
+        ),
+        //============================================================
+        // When the value in the Textfield is changed, create the list
+        // of participant data fields
+        //============================================================
+        onChanged: (numParticipants) {
+          //Get the number of participants
+          numParticipants = _participantCountController.text.trim();
+
+          //Error check the value
+          setState(() {
+            //Get the number of participants and error check the value entered
+            errorCode = checkInt(numParticipants.toString());
+          });
+          //If the status code returns a valid value, then get the number entered
+          if (errorCode == ERROR_CODE.VALID) {
+            participants = int.parse(numParticipants.toString());
+            createNewParticipantList();
+          } //end if
+        },
+      ),
+    );
+  }
+
+  Widget printErrorMessage() {
+    return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 0.0),
+        child: Text(
+          getErrorMessage(errorCode),
+          style: TextStyle(
+              fontSize: 15, fontWeight: FontWeight.w500, color: Colors.red),
+        ));
+  }
+
+  //==================================================================
+  // Will return a button to increment of decrement the participants
+  // count
+  //==================================================================
+  FloatingActionButton getIncrementDecrementButton(bool isIncrement) {
+    //Assignt values depenendent of what button is to be used
+    IconData icon = Icons.add;
+    String herotag = 'IncrementButton';
+
+    if (!isIncrement) {
+      icon = Icons.remove;
+      herotag = 'DecrementButton';
+    } //end if
+
+    return FloatingActionButton(
+        child: new Icon(icon),
+        backgroundColor: themeColor,
+        heroTag: herotag,
+        onPressed: () {
+          //Set the state of the values to reload the widgets
+          setState(() {
+            //Get the number of participants and error check the value entered
+            numParticipants = _participantCountController.text.trim();
+            errorCode = checkInt(numParticipants.toString());
+          });
+
+          //If the errorcode shows the value entered is valid,
+          //Then get the number of participants and increment it
+          //Create the list of participants
+          if (int.tryParse(numParticipants.toString().trim()) != null) {
+            participants = int.parse(numParticipants.toString());
+            if (isIncrement)
+              participants++;
+            else
+              participants--;
+            _participantCountController.text = participants.toString();
+            createNewParticipantList();
+          } //end if
+        });
+  }
+
+  //==================================================================
+  // Button will assign secret santas to valid participants
+  //==================================================================
+  FloatingActionButton getRandomizeAndAssignButton() {
+    return FloatingActionButton(
+        child: new Icon(Icons.check),
+        backgroundColor: themeColor,
+        heroTag: 'RandomizeButton',
+        onPressed: () {
+          //Set the state of the values to reload the widgets
+          errorCode = checkInt(_participantCountController.text.trim());
+
+          if (errorCode == ERROR_CODE.VALID) showAlertDialog(context);
+        });
   }
 
   //============================================================================
@@ -258,13 +272,36 @@ class _MyHomePageState extends State<MyHomePage> {
   showAlertDialog(BuildContext context) {
     // set up the buttons
     Widget cancelButton = TextButton(
-      child: Text("Hold up"),
+      child: RichText(
+          text: TextSpan(
+        text: "Hold up",
+        style: TextStyle(
+            color: Colors.blue,
+            fontFamily: "Raleway",
+            fontWeight: FontWeight.bold),
+      )),
       onPressed: () {
         Navigator.pop(context);
+        FocusManager.instance.primaryFocus?.unfocus();
       },
     );
     Widget confirmButton = TextButton(
-        child: Text("ASSIGN THE SANTASSSSSS"),
+        child: RichText(
+            text: TextSpan(children: [
+          TextSpan(
+            text: "ASSIGN THE SANTASSS",
+            style: TextStyle(
+                color: Colors.blue,
+                fontFamily: "RobotoMono",
+                fontWeight: FontWeight.bold),
+          ),
+          TextSpan(
+            text: '🎅🎅🎅', // emoji characters
+            style: TextStyle(
+              fontFamily: 'EmojiOne',
+            ),
+          )
+        ])),
         onPressed: () {
           print("randomize button pressed");
 
@@ -284,17 +321,17 @@ class _MyHomePageState extends State<MyHomePage> {
         text: TextSpan(
           children: <TextSpan>[
             TextSpan(
-              text: '🦌🎁⛄🎅', // emoji characters
+              text: '⛄🎁', // emoji characters
               style: TextStyle(
                 fontFamily: 'EmojiOne',
               ),
             ),
             TextSpan(
               text: 'Secret Santas will be assigned',
-              style: TextStyle(fontFamily: "Raleway", color: Colors.black),
+              style: TextStyle(fontFamily: "RobotoMono", color: Colors.black, fontSize: 14),
             ),
             TextSpan(
-              text: '🎅⛄🎁🦌', // emoji characters
+              text: '🎁⛄', // emoji characters
               style: TextStyle(
                 fontFamily: 'EmojiOne',
               ),

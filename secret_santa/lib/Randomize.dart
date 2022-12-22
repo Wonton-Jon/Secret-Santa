@@ -30,14 +30,20 @@ List<UserData> randomize(List<UserData> participants) {
 //participant[participants.length - 1] is assigned participant[0] i.e. the last person
 //in the list is assigned the first person
 List<UserData> assignSecretSantas(List<UserData> participants) {
-  for (int i = 0; i < participants.length - 1; i++) {
-    participants[i].assignee = participants[i + 1];
-  } //end for
-  participants[participants.length - 1].assignee = participants[0];
-
-  for (int i = 0; i < participants.length; i++) {
-    print('item $i: ${participants[i].toString()}');
-  } //end for
+  
+  try {
+    for (int i = 0; i < participants.length - 1; i++) {
+      participants[i].assignee = participants[i + 1];
+    } //end for
+    participants[participants.length - 1].assignee = participants[0];
+    
+    for (int i = 0; i < participants.length; i++) {
+      print('item $i: ${participants[i].toString()}');
+    } //end for
+  } on Exception catch (e) {
+    
+  }
+  
 
   return participants;
 }
