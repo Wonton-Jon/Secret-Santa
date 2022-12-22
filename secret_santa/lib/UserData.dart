@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:secret_santa/main.dart';
 
 enum TEXTFIELD_ID { NAME, EMAIL }
 
 class UserData {
   String? name; //User's name
   String? email; //User's email
-  String? assignee; //Person that you are assigned to for secret santa
+  UserData? assignee; //Person that you are assigned to for secret santa
   TextEditingController _nameController =
       TextEditingController(); //Controller for name text field
   TextEditingController _emailController =
@@ -29,7 +30,7 @@ class UserData {
     email = _emailController.text.trim();
   }
 
-  Widget getContainer() {
+  Widget getContainer(int index) {
     return Padding(
       padding: EdgeInsets.all(0.0),
       child: Container(
@@ -43,20 +44,18 @@ class UserData {
               },
               controller: _nameController,
               decoration: InputDecoration(
-                hintText: 'Enter person\'s name.',
+                hintText: 'Enter Santa #${index + 1}\'s name',
                 contentPadding:
                     EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(32.0)),
                 ),
                 enabledBorder: OutlineInputBorder(
-                  borderSide:
-                      BorderSide(color: Colors.lightBlueAccent, width: 1.0),
+                  borderSide: BorderSide(color: themeColor!, width: 1.0),
                   borderRadius: BorderRadius.all(Radius.circular(32.0)),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderSide:
-                      BorderSide(color: Colors.lightBlueAccent, width: 2.0),
+                  borderSide: BorderSide(color: themeColor!, width: 2.0),
                   borderRadius: BorderRadius.all(Radius.circular(32.0)),
                 ),
               ),
@@ -69,20 +68,18 @@ class UserData {
               },
               controller: _emailController,
               decoration: InputDecoration(
-                hintText: 'Enter person\'s email.',
+                hintText: 'Enter Santa #${index + 1}\'s email',
                 contentPadding:
                     EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(32.0)),
                 ),
                 enabledBorder: OutlineInputBorder(
-                  borderSide:
-                      BorderSide(color: Colors.lightBlueAccent, width: 1.0),
+                  borderSide: BorderSide(color: themeColor!, width: 1.0),
                   borderRadius: BorderRadius.all(Radius.circular(32.0)),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderSide:
-                      BorderSide(color: Colors.lightBlueAccent, width: 2.0),
+                  borderSide: BorderSide(color: themeColor!, width: 2.0),
                   borderRadius: BorderRadius.all(Radius.circular(32.0)),
                 ),
               ),
@@ -91,7 +88,8 @@ class UserData {
         ),
         margin: EdgeInsets.all(20),
         padding: EdgeInsets.all(0.0),
-        decoration: BoxDecoration(border: Border.all(color: Colors.red)),
+        decoration:
+            BoxDecoration(border: Border.all(color: Colors.transparent)),
         width: 10,
         height: 100,
       ),
@@ -104,7 +102,10 @@ class UserData {
     StringBuffer string = StringBuffer();
 
     string.write('name:  $name\n');
-    string.write('email: $email\n\n');
+    string.write('email: $email\n');
+    string.write('assignee name: ${assignee!.name}\n\n');
+    string.write('assignee email: ${assignee!.email}\n\n');
+
     return string.toString();
   }
 }
