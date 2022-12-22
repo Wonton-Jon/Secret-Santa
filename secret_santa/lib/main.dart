@@ -89,7 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         title: Text(
           widget.title,
@@ -105,28 +105,19 @@ class _MyHomePageState extends State<MyHomePage> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               getParticpantTextField(),
-              Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 25.0, vertical: 0.0),
-                  child: Text(
-                    getErrorMessage(errorCode),
-                    style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.red),
-                  )),
+              printErrorMessage(),
               //If the number of participants is zero, create an empty container,
               //Otherwise create the list of data
               participants == 0
                   ? Container()
                   : Container(
-                    
-                    height: 550,
-                    decoration:  BoxDecoration(
-                      border: Border.all(color: Colors.transparent, width: 1.5),
-                      borderRadius: BorderRadius.circular(24)
-                    ),
-                    child: ListView.builder(
+                      height: 550,
+                      decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          border:
+                              Border.all(color: Colors.transparent, width: 1.5),
+                          borderRadius: BorderRadius.circular(24)),
+                      child: ListView.builder(
                         physics: AlwaysScrollableScrollPhysics(),
                         itemCount: participantList.length,
                         itemBuilder: (context, index) {
@@ -134,7 +125,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         },
                         shrinkWrap: true,
                       ),
-                  ),
+                    ),
             ],
           ),
         ),
@@ -142,17 +133,21 @@ class _MyHomePageState extends State<MyHomePage> {
       //========================================================================
       // Placement for the increment and decrement buttons
       //========================================================================
-      floatingActionButton: Padding(
-        padding: EdgeInsets.only(left: 30),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            getIncrementDecrementButton(false),
-            Expanded(child: Container()),
-            getRandomizeAndAssignButton(),
-            Expanded(child: Container()),
-            getIncrementDecrementButton(true)
-          ],
+      bottomNavigationBar: 
+      SizedBox(
+        height: 68,
+        child: Padding(
+          padding: EdgeInsets.only(bottom: 10),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              getIncrementDecrementButton(false),
+              Expanded(child: Container()),
+              getRandomizeAndAssignButton(),
+              Expanded(child: Container()),
+              getIncrementDecrementButton(true)
+            ],
+          ),
         ),
       ),
     );
@@ -194,6 +189,19 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  Widget printErrorMessage() {
+    return Padding(
+            padding: const EdgeInsets.symmetric(
+                horizontal: 25.0, vertical: 0.0),
+            child: Text(
+              getErrorMessage(errorCode),
+              style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.red),
+            ));
+  }
+
   //==================================================================
   // Will return a button to increment of decrement the participants
   // count
@@ -206,7 +214,7 @@ class _MyHomePageState extends State<MyHomePage> {
     if (!isIncrement) {
       icon = Icons.remove;
       herotag = 'DecrementButton';
-    }//end if
+    } //end if
 
     return FloatingActionButton(
         child: new Icon(icon),

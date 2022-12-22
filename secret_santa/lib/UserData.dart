@@ -37,6 +37,7 @@ class UserData {
         child: Column(
           children: [
             nameTextField = TextField(
+              textInputAction: TextInputAction.next,
               onChanged: (value) {
                 print('vlaue is $value');
                 name = _nameController.text.trim();
@@ -61,6 +62,7 @@ class UserData {
               ),
             ),
             emailTextField = TextField(
+              textInputAction: TextInputAction.next,
               onChanged: (value) {
                 print('calue is $value');
                 email = _emailController.text.trim();
