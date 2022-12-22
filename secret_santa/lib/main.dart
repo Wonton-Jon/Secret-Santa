@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:secret_santa/ErrorCheck.dart';
 import 'package:secret_santa/Randomize.dart';
@@ -87,7 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: true,
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text(
           widget.title,
@@ -102,36 +104,7 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                child: TextFormField(
-                  controller: _participantCountController,
-                  decoration: const InputDecoration(
-                    border: UnderlineInputBorder(),
-                    labelText: 'Enter Number of Participants',
-                  ),
-                  //============================================================
-                  // When the value in the Textfield is changed, create the list
-                  // of participant data fields
-                  //============================================================
-                  onChanged: (numParticipants) {
-                    //Get the number of participants
-                    numParticipants = _participantCountController.text.trim();
-
-                    //Error check the value
-                    setState(() {
-                      //Get the number of participants and error check the value entered
-                      errorCode = checkInt(numParticipants.toString());
-                    });
-                    //If the status code returns a valid value, then get the number entered
-                    if (errorCode == ERROR_CODE.VALID) {
-                      participants = int.parse(numParticipants.toString());
-                      createNewParticipantList();
-                    } //end if
-                  },
-                ),
-              ),
+              getParticpantTextField(),
               Padding(
                   padding: const EdgeInsets.symmetric(
                       horizontal: 25.0, vertical: 0.0),
@@ -146,14 +119,22 @@ class _MyHomePageState extends State<MyHomePage> {
               //Otherwise create the list of data
               participants == 0
                   ? Container()
-                  : ListView.builder(
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: participantList.length,
-                      itemBuilder: (context, index) {
-                        return participantList[index].getContainer(index);
-                      },
-                      shrinkWrap: true,
+                  : Container(
+                    
+                    height: 550,
+                    decoration:  BoxDecoration(
+                      border: Border.all(color: Colors.transparent, width: 1.5),
+                      borderRadius: BorderRadius.circular(24)
                     ),
+                    child: ListView.builder(
+                        physics: AlwaysScrollableScrollPhysics(),
+                        itemCount: participantList.length,
+                        itemBuilder: (context, index) {
+                          return participantList[index].getContainer(index);
+                        },
+                        shrinkWrap: true,
+                      ),
+                  ),
             ],
           ),
         ),
@@ -166,29 +147,71 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            getDecrementButton(),
+            getIncrementDecrementButton(false),
             Expanded(child: Container()),
             getRandomizeAndAssignButton(),
             Expanded(child: Container()),
-            getIncrementButton()
+            getIncrementDecrementButton(true)
           ],
         ),
       ),
     );
   }
-  
+
   //============================================================================
   // METHOD CALLS FOR UI COMPONENTS
   //============================================================================
 
+  Widget getParticpantTextField() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+      child: TextFormField(
+        controller: _participantCountController,
+        decoration: const InputDecoration(
+          border: UnderlineInputBorder(),
+          labelText: 'Enter Number of Participants',
+        ),
+        //============================================================
+        // When the value in the Textfield is changed, create the list
+        // of participant data fields
+        //============================================================
+        onChanged: (numParticipants) {
+          //Get the number of participants
+          numParticipants = _participantCountController.text.trim();
+
+          //Error check the value
+          setState(() {
+            //Get the number of participants and error check the value entered
+            errorCode = checkInt(numParticipants.toString());
+          });
+          //If the status code returns a valid value, then get the number entered
+          if (errorCode == ERROR_CODE.VALID) {
+            participants = int.parse(numParticipants.toString());
+            createNewParticipantList();
+          } //end if
+        },
+      ),
+    );
+  }
+
   //==================================================================
-  // Button will increment the number of participants entered
+  // Will return a button to increment of decrement the participants
+  // count
   //==================================================================
-  FloatingActionButton getIncrementButton() {
+  FloatingActionButton getIncrementDecrementButton(bool isIncrement) {
+    //Assignt values depenendent of what button is to be used
+    IconData icon = Icons.add;
+    String herotag = 'IncrementButton';
+
+    if (!isIncrement) {
+      icon = Icons.remove;
+      herotag = 'DecrementButton';
+    }//end if
+
     return FloatingActionButton(
-        child: new Icon(Icons.add),
+        child: new Icon(icon),
         backgroundColor: themeColor,
-        heroTag: 'IncrementButton',
+        heroTag: herotag,
         onPressed: () {
           //Set the state of the values to reload the widgets
           setState(() {
@@ -202,7 +225,10 @@ class _MyHomePageState extends State<MyHomePage> {
           //Create the list of participants
           if (int.tryParse(numParticipants.toString().trim()) != null) {
             participants = int.parse(numParticipants.toString());
-            participants++;
+            if (isIncrement)
+              participants++;
+            else
+              participants--;
             _participantCountController.text = participants.toString();
             createNewParticipantList();
           } //end if
@@ -222,34 +248,6 @@ class _MyHomePageState extends State<MyHomePage> {
           errorCode = checkInt(_participantCountController.text.trim());
 
           if (errorCode == ERROR_CODE.VALID) showAlertDialog(context);
-        });
-  }
-
-  //==================================================================
-  // Button will decrement the number of participants entered
-  //==================================================================
-  FloatingActionButton getDecrementButton() {
-    return FloatingActionButton(
-        child: new Icon(Icons.remove),
-        backgroundColor: themeColor,
-        heroTag: 'DecrementButton',
-        onPressed: () {
-          //Set the state of the values to reload the widgets
-          setState(() {
-            //Get the number of participants and error check the value entered
-            numParticipants = _participantCountController.text.trim();
-            errorCode = checkInt(numParticipants.toString());
-          }); //If the error code is valid, then increment the number of participants
-
-          //If the errorcode shows the value entered is valid,
-          //Then get the number of participants and decrement it
-          //Create the list of participants
-          if (int.tryParse(numParticipants.toString()) != null) {
-            participants = int.parse(numParticipants.toString());
-            participants--;
-            _participantCountController.text = participants.toString();
-            createNewParticipantList();
-          } //end if
         });
   }
 

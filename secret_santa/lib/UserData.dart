@@ -70,7 +70,7 @@ class UserData {
               decoration: InputDecoration(
                 hintText: 'Enter Santa #${index + 1}\'s email',
                 contentPadding:
-                    EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                    EdgeInsets.symmetric(vertical: 5.0, horizontal: 20.0),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(32.0)),
                 ),
