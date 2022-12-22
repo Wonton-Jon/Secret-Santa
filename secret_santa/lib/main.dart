@@ -160,85 +160,11 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    //==================================================================
-                    // Button will increment the number of participants entered
-                    //==================================================================
-                    FloatingActionButton(
-                      child: new Icon(Icons.add),
-                      backgroundColor: themeColor,
-                      heroTag: 'IncrementButton',
-                      onPressed: () {
-                        //Set the state of the values to reload the widgets
-                        setState(() {
-                          //Get the number of participants and error check the value entered
-                          numParticipants =
-                              _participantCountController.text.trim();
-                          errorCode = checkInt(numParticipants.toString());
-                        });
-
-                        //If the errorcode shows the value entered is valid,
-                        //Then get the number of participants and increment it
-                        //Create the list of participants
-                        if (int.tryParse(numParticipants.toString().trim()) !=
-                            null) {
-                          participants = int.parse(numParticipants.toString());
-                          participants++;
-                          _participantCountController.text =
-                              participants.toString();
-                          createNewParticipantList();
-                        } //end if
-                      },
-                    ),
-
+                    getDecrementButton(),
                     Expanded(child: Container()),
-
-                    //==================================================================
-                    // Button will assign secret santas to valid participants
-                    //==================================================================
-                    FloatingActionButton(
-                      child: new Icon(Icons.check),
-                      backgroundColor: themeColor,
-                      heroTag: 'RandomizeButton',
-                      onPressed: () {
-                        //Set the state of the values to reload the widgets
-                        errorCode =
-                            checkInt(_participantCountController.text.trim());
-
-                        if (errorCode == ERROR_CODE.VALID)
-                          showAlertDialog(context);
-                      },
-                    ),
-
+                    getRandomizeAndAssignButton(),
                     Expanded(child: Container()),
-
-                    //==================================================================
-                    // Button will decrement the number of participants entered
-                    //==================================================================
-                    FloatingActionButton(
-                      child: new Icon(Icons.remove),
-                      backgroundColor: themeColor,
-                      heroTag: 'DecrementButton',
-                      onPressed: () {
-                        //Set the state of the values to reload the widgets
-                        setState(() {
-                          //Get the number of participants and error check the value entered
-                          numParticipants =
-                              _participantCountController.text.trim();
-                          errorCode = checkInt(numParticipants.toString());
-                        }); //If the error code is valid, then increment the number of participants
-
-                        //If the errorcode shows the value entered is valid,
-                        //Then get the number of participants and decrement it
-                        //Create the list of participants
-                        if (int.tryParse(numParticipants.toString()) != null) {
-                          participants = int.parse(numParticipants.toString());
-                          participants--;
-                          _participantCountController.text =
-                              participants.toString();
-                          createNewParticipantList();
-                        } //end if
-                      },
-                    )
+                    getIncrementButton()
                   ],
                 ),
               )
@@ -250,6 +176,88 @@ class _MyHomePageState extends State<MyHomePage> {
       // Placement for the increment and decrement buttons
       //========================================================================
     );
+  }
+  //============================================================================
+  // METHOD CALLS FOR UI COMPONENTS
+  //============================================================================
+
+  //==================================================================
+  // Button will increment the number of participants entered
+  //==================================================================                  
+  FloatingActionButton getIncrementButton() {
+   return FloatingActionButton(
+            child: new Icon(Icons.add),
+            backgroundColor: themeColor,
+            heroTag: 'IncrementButton',
+            onPressed: () {
+              //Set the state of the values to reload the widgets
+              setState(() {
+                //Get the number of participants and error check the value entered
+                numParticipants =
+                    _participantCountController.text.trim();
+                errorCode = checkInt(numParticipants.toString());
+              });
+
+              //If the errorcode shows the value entered is valid,
+              //Then get the number of participants and increment it
+              //Create the list of participants
+              if (int.tryParse(numParticipants.toString().trim()) !=
+                  null) {
+                participants = int.parse(numParticipants.toString());
+                participants++;
+                _participantCountController.text =
+                    participants.toString();
+                createNewParticipantList();
+              } //end if
+            });
+  }
+
+  //==================================================================
+  // Button will assign secret santas to valid participants
+  //==================================================================
+  FloatingActionButton getRandomizeAndAssignButton() {
+    return FloatingActionButton(
+            child: new Icon(Icons.check),
+            backgroundColor: themeColor,
+            heroTag: 'RandomizeButton',
+            onPressed: () {
+              //Set the state of the values to reload the widgets
+              errorCode =
+                  checkInt(_participantCountController.text.trim());
+
+              if (errorCode == ERROR_CODE.VALID)
+                showAlertDialog(context);
+            });
+  }
+
+  //==================================================================
+  // Button will decrement the number of participants entered
+  //==================================================================
+  FloatingActionButton getDecrementButton() {
+    return FloatingActionButton(
+      child: new Icon(Icons.remove),
+      backgroundColor: themeColor,
+      heroTag: 'DecrementButton',
+      onPressed: () {
+        //Set the state of the values to reload the widgets
+        setState(() {
+          //Get the number of participants and error check the value entered
+          numParticipants =
+              _participantCountController.text.trim();
+          errorCode = checkInt(numParticipants.toString());
+        }); //If the error code is valid, then increment the number of participants
+
+        //If the errorcode shows the value entered is valid,
+        //Then get the number of participants and decrement it
+        //Create the list of participants
+        if (int.tryParse(numParticipants.toString()) != null) {
+          participants = int.parse(numParticipants.toString());
+          participants--;
+          _participantCountController.text =
+              participants.toString();
+          createNewParticipantList();
+        } //end if
+    });
   }
 
   //============================================================================
