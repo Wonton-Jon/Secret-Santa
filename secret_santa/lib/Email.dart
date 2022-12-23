@@ -53,7 +53,7 @@ Future composeAndSendEmails(List<UserData> participants) async {
   print('inside composeAndSendEmails()');
   for (int i = 0; i < participants.length; i++) {
     await sendEmail(
-        participants[i].name,
+        participants[i].email,
         'Hello there ${participants[i].name}!\n'
         'You have been given the role of being ${participants[i].assignee!.name.toString()}\'s Secret Santa !!!');
   } //end for
