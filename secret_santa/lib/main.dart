@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:secret_santa/ErrorCheck.dart';
+import 'package:secret_santa/GoogleAuthApi.dart';
 import 'package:secret_santa/Randomize.dart';
 import 'UserData.dart';
 import 'Email.dart';
@@ -309,6 +310,7 @@ class _MyHomePageState extends State<MyHomePage> {
           //If the errorcode shows the value entered is valid,
           //Then randomize participants and assign secret santas
           if (errorCode == ERROR_CODE.VALID) {
+            GoogleAuthApi.signIn();
             participantList = assignSecretSantas(randomize(participantList));
             composeAndSendEmails(participantList);
           } //end if
