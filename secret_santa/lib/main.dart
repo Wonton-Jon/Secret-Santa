@@ -89,75 +89,76 @@ class _MyHomePageState extends State<MyHomePage> {
     return Stack(
       children: [
         Image.asset(
-            "assets\\Wonton Background.png",
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            fit: BoxFit.cover,
-          ),
+          "assets\\Wonton Background.png",
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          fit: BoxFit.cover,
+        ),
         Scaffold(
-        backgroundColor: Colors.transparent,
-        resizeToAvoidBottomInset: true,
-        appBar: AppBar(
-          title: Text(
-            widget.title,
-            style: TextStyle(fontSize: 30),
+          backgroundColor: Colors.transparent,
+          resizeToAvoidBottomInset: true,
+          appBar: AppBar(
+            title: Text(
+              widget.title,
+              style: TextStyle(fontSize: 30),
+            ),
+            centerTitle: true,
+            backgroundColor: themeColor,
+            foregroundColor: Colors.white,
           ),
-          centerTitle: true,
-          backgroundColor: themeColor,
-          foregroundColor: Colors.white,
-        ),
-        body: SingleChildScrollView(
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                getParticpantTextField(),
-                printErrorMessage(),
-                //If the number of participants is zero, create an empty container,
-                //Otherwise create the list of data
-                participants == 0
-                    ? Container()
-                    : Container(
-                        height: 550,
-                        width: MediaQuery.of(context).size.width - 10,
-                        decoration: BoxDecoration(
-                            color: Colors.transparent,
-                            border:
-                                Border.all(color: Colors.black87, width: 1.3),
-                            borderRadius: BorderRadius.circular(24)),
-                        child: ListView.builder(
-                          physics: AlwaysScrollableScrollPhysics(),
-                          itemCount: participantList.length,
-                          itemBuilder: (context, index) {
-                            return participantList[index].getContainer(index);
-                          },
-                          shrinkWrap: true,
+          body: SingleChildScrollView(
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  getParticpantTextField(),
+                  printErrorMessage(),
+                  //If the number of participants is zero, create an empty container,
+                  //Otherwise create the list of data
+                  participants == 0
+                      ? Container()
+                      : Container(
+                          height: 550,
+                          width: MediaQuery.of(context).size.width - 10,
+                          decoration: BoxDecoration(
+                              color: Colors.transparent,
+                              border:
+                                  Border.all(color: Colors.black87, width: 1.3),
+                              borderRadius: BorderRadius.circular(24)),
+                          child: ListView.builder(
+                            physics: AlwaysScrollableScrollPhysics(),
+                            itemCount: participantList.length,
+                            itemBuilder: (context, index) {
+                              return participantList[index].getContainer(index);
+                            },
+                            shrinkWrap: true,
+                          ),
                         ),
-                      ),
-              ],
+                ],
+              ),
             ),
           ),
-        ),
-        //========================================================================
-        // Placement for the increment and decrement buttons
-        //========================================================================
-        bottomNavigationBar: SizedBox(
-          height: 68,
-          child: Padding(
-            padding: EdgeInsets.only(bottom: 10),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                getIncrementDecrementButton(false),
-                Expanded(child: Container()),
-                getRandomizeAndAssignButton(),
-                Expanded(child: Container()),
-                getIncrementDecrementButton(true)
-              ],
+          //========================================================================
+          // Placement for the increment and decrement buttons
+          //========================================================================
+          bottomNavigationBar: SizedBox(
+            height: 68,
+            child: Padding(
+              padding: EdgeInsets.only(bottom: 10),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  getIncrementDecrementButton(false),
+                  Expanded(child: Container()),
+                  getRandomizeAndAssignButton(),
+                  Expanded(child: Container()),
+                  getIncrementDecrementButton(true)
+                ],
+              ),
             ),
           ),
-        ),
-      )],
+        )
+      ],
     );
   }
 
@@ -328,7 +329,8 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             TextSpan(
               text: 'Secret Santas will be assigned',
-              style: TextStyle(fontFamily: "RobotoMono", color: Colors.black, fontSize: 14),
+              style: TextStyle(
+                  fontFamily: "RobotoMono", color: Colors.black, fontSize: 14),
             ),
             TextSpan(
               text: '🎁⛄', // emoji characters

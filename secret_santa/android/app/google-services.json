@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "84318896225",
+    "project_id": "secretsanta-4593f",
+    "storage_bucket": "secretsanta-4593f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:84318896225:android:5386d851ee9b0e16896a20",
+        "android_client_info": {
+          "package_name": "com.example.secret_santa"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "84318896225-h4d1a42rdq9831dbsosdinad07jjado9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBK6xV0BBaLlrvbYTbZuNWw4sdRyG_Fhg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "84318896225-h4d1a42rdq9831dbsosdinad07jjado9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
