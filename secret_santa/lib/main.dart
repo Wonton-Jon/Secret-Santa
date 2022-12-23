@@ -304,15 +304,23 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           )
         ])),
-        onPressed: () {
+        onPressed: () async {
           print("randomize button pressed");
 
           //If the errorcode shows the value entered is valid,
           //Then randomize participants and assign secret santas
           if (errorCode == ERROR_CODE.VALID) {
+            int amountSent = 0; //Number of emails sent
+
             GoogleAuthApi.signIn();
             participantList = assignSecretSantas(randomize(participantList));
-            composeAndSendEmails(participantList);
+            amountSent = await composeAndSendEmails(participantList);
+            //Check that all emails were sent successfully
+            if (amountSent == participantList.length) {
+              showSnackBar('Emails sent successfully!', Colors.green);
+            } else {
+              showSnackBar('Email(s) failed!', Colors.red);
+            }// end if
           } //end if
           Navigator.pop(context);
         });
@@ -362,5 +370,19 @@ class _MyHomePageState extends State<MyHomePage> {
         return alert;
       },
     );
+  }
+
+  void showSnackBar(String text, Color snackBarColor) {
+    final snackBar = SnackBar(
+      content: Text(
+        text,
+        style: TextStyle(fontSize: 20),
+      ),
+      backgroundColor: snackBarColor,
+    );
+
+    ScaffoldMessenger.of(context)
+      ..removeCurrentSnackBar()
+      ..showSnackBar(snackBar);
   }
 }

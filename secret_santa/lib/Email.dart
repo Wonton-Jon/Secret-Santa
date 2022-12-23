@@ -1,68 +1,27 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'UserData.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
 import 'GoogleAuthApi.dart';
 
-//Creates list of emails to send to each person and sends them
-Future composeEmails(List<UserData> participants) async {
-  for (int i = 0; i < participants.length; i++) {
-    //Used for testing
-    Email e = Email(
-      body: 'Hello there ${participants[i].name}!\n'
-          'You have been given the role of being ${participants[i].assignee!.name.toString()}\'s Secret Santa !!!',
-      subject: 'Secret Santaaaaaa',
-      recipients: [participants[i].email.toString()],
-      cc: [],
-      bcc: [],
-      attachmentPaths: [],
-      isHTML: false,
-    );
-
-    print('$i--------------------------------------');
-    print('santa: ${participants[i].name}');
-    print('santa email: ${participants[i].email}');
-    print('assignee: ${participants[i].assignee!.name}');
-    print('assignee email: ${participants[i].assignee!.email}');
-
-    //end testing
-
-    await FlutterEmailSender.send(Email(
-      body: 'Hello there ${participants[i].name}!\n'
-          'You have been given the role of being ${participants[i].assignee!.name.toString()}\'s Secret Santa !!!',
-      subject: 'Secret Santaaaaaa',
-      recipients: [participants[i].email.toString()],
-      cc: [],
-      bcc: [],
-      attachmentPaths: [],
-      isHTML: false,
-    ));
-  } //end for
-
-  '''
-  jmaguirre111@gmail.com
-  jomaguir@ucsc.edu
-  thechowshims456@gmail.com
-  Megalodon6e23@gmail.com
-
-  ''';
-}
-
-Future composeAndSendEmails(List<UserData> participants) async {
+Future<int> composeAndSendEmails(List<UserData> participants) async {
   print('inside composeAndSendEmails()');
+  int amountSent = 0;
   for (int i = 0; i < participants.length; i++) {
-    await sendEmail(
+    if (await sendEmail(
         participants[i].email,
         'Hello there ${participants[i].name}!\n'
-        'You have been given the role of being ${participants[i].assignee!.name.toString()}\'s Secret Santa !!!');
+        'You have been given the role of being ${participants[i].assignee!.name.toString()}\'s Secret Santa !!!'))
+      amountSent++;
   } //end for
+
+  return await amountSent;
 }
 
-Future sendEmail(String? recipient, String? messageBody) async {
+Future<bool> sendEmail(String? recipient, String? messageBody) async {
   final user = await GoogleAuthApi.signIn();
+  bool sent = false;
   print('user $user');
-  if (user == null) return;
+  if (user == null) return sent;
 
   String email = user.email.trim();
   final auth = await user.authentication;
@@ -85,8 +44,12 @@ Future sendEmail(String? recipient, String? messageBody) async {
 
   try {
     await send(message, smtpServer);
+    sent = true;
   } on Exception catch (e) {
     print("Error email to $recipient failed");
     print(e);
+    sent = false;
   }
+
+  return await sent;
 }
