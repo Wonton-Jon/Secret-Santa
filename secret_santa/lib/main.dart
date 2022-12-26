@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:secret_santa/ErrorCheck.dart';
+import 'package:secret_santa/GoogleAuthApi.dart';
 import 'package:secret_santa/Randomize.dart';
 import 'UserData.dart';
 import 'Email.dart';
@@ -89,75 +90,76 @@ class _MyHomePageState extends State<MyHomePage> {
     return Stack(
       children: [
         Image.asset(
-            "assets\\Wonton Background.png",
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            fit: BoxFit.cover,
-          ),
+          "assets\\Wonton Background.png",
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          fit: BoxFit.cover,
+        ),
         Scaffold(
-        backgroundColor: Colors.transparent,
-        resizeToAvoidBottomInset: true,
-        appBar: AppBar(
-          title: Text(
-            widget.title,
-            style: TextStyle(fontSize: 30),
+          backgroundColor: Colors.transparent,
+          resizeToAvoidBottomInset: true,
+          appBar: AppBar(
+            title: Text(
+              widget.title,
+              style: TextStyle(fontSize: 30),
+            ),
+            centerTitle: true,
+            backgroundColor: themeColor,
+            foregroundColor: Colors.white,
           ),
-          centerTitle: true,
-          backgroundColor: themeColor,
-          foregroundColor: Colors.white,
-        ),
-        body: SingleChildScrollView(
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                getParticpantTextField(),
-                printErrorMessage(),
-                //If the number of participants is zero, create an empty container,
-                //Otherwise create the list of data
-                participants == 0
-                    ? Container()
-                    : Container(
-                        height: 550,
-                        width: MediaQuery.of(context).size.width - 10,
-                        decoration: BoxDecoration(
-                            color: Colors.transparent,
-                            border:
-                                Border.all(color: Colors.black87, width: 1.3),
-                            borderRadius: BorderRadius.circular(24)),
-                        child: ListView.builder(
-                          physics: AlwaysScrollableScrollPhysics(),
-                          itemCount: participantList.length,
-                          itemBuilder: (context, index) {
-                            return participantList[index].getContainer(index);
-                          },
-                          shrinkWrap: true,
+          body: SingleChildScrollView(
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  getParticpantTextField(),
+                  printErrorMessage(),
+                  //If the number of participants is zero, create an empty container,
+                  //Otherwise create the list of data
+                  participants == 0
+                      ? Container()
+                      : Container(
+                          height: 550,
+                          width: MediaQuery.of(context).size.width - 10,
+                          decoration: BoxDecoration(
+                              color: Colors.transparent,
+                              border:
+                                  Border.all(color: Colors.black87, width: 1.3),
+                              borderRadius: BorderRadius.circular(24)),
+                          child: ListView.builder(
+                            physics: AlwaysScrollableScrollPhysics(),
+                            itemCount: participantList.length,
+                            itemBuilder: (context, index) {
+                              return participantList[index].getContainer(index);
+                            },
+                            shrinkWrap: true,
+                          ),
                         ),
-                      ),
-              ],
+                ],
+              ),
             ),
           ),
-        ),
-        //========================================================================
-        // Placement for the increment and decrement buttons
-        //========================================================================
-        bottomNavigationBar: SizedBox(
-          height: 68,
-          child: Padding(
-            padding: EdgeInsets.only(bottom: 10),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                getIncrementDecrementButton(false),
-                Expanded(child: Container()),
-                getRandomizeAndAssignButton(),
-                Expanded(child: Container()),
-                getIncrementDecrementButton(true)
-              ],
+          //========================================================================
+          // Placement for the increment and decrement buttons
+          //========================================================================
+          bottomNavigationBar: SizedBox(
+            height: 68,
+            child: Padding(
+              padding: EdgeInsets.only(bottom: 10),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  getIncrementDecrementButton(false),
+                  Expanded(child: Container()),
+                  getRandomizeAndAssignButton(),
+                  Expanded(child: Container()),
+                  getIncrementDecrementButton(true)
+                ],
+              ),
             ),
           ),
-        ),
-      )],
+        )
+      ],
     );
   }
 
@@ -302,14 +304,23 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           )
         ])),
-        onPressed: () {
+        onPressed: () async {
           print("randomize button pressed");
 
           //If the errorcode shows the value entered is valid,
           //Then randomize participants and assign secret santas
           if (errorCode == ERROR_CODE.VALID) {
+            int amountSent = 0; //Number of emails sent
+
+            GoogleAuthApi.signIn();
             participantList = assignSecretSantas(randomize(participantList));
-            composeAndSendEmails(participantList);
+            amountSent = await composeAndSendEmails(participantList);
+            //Check that all emails were sent successfully
+            if (amountSent == participantList.length) {
+              showSnackBar('Emails sent successfully!', Colors.green);
+            } else {
+              showSnackBar('Email(s) failed!', Colors.red);
+            }// end if
           } //end if
           Navigator.pop(context);
         });
@@ -328,7 +339,8 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             TextSpan(
               text: 'Secret Santas will be assigned',
-              style: TextStyle(fontFamily: "RobotoMono", color: Colors.black, fontSize: 14),
+              style: TextStyle(
+                  fontFamily: "RobotoMono", color: Colors.black, fontSize: 14),
             ),
             TextSpan(
               text: '🎁⛄', // emoji characters
@@ -358,5 +370,19 @@ class _MyHomePageState extends State<MyHomePage> {
         return alert;
       },
     );
+  }
+
+  void showSnackBar(String text, Color snackBarColor) {
+    final snackBar = SnackBar(
+      content: Text(
+        text,
+        style: TextStyle(fontSize: 20),
+      ),
+      backgroundColor: snackBarColor,
+    );
+
+    ScaffoldMessenger.of(context)
+      ..removeCurrentSnackBar()
+      ..showSnackBar(snackBar);
   }
 }
